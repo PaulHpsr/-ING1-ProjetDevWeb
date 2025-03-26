@@ -25,6 +25,7 @@
         "doctrine/sql-formatter": "^1.5",
         "psr/container": "^2.0",
         "psr/event-dispatcher": "^1.0",
+        "symfony/asset": "7.2.*",
         "symfony/cache": "7.2.*",
         "symfony/cache-contracts": "^3.5",
         "symfony/config": "7.2.*",

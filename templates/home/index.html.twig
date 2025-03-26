@@ -6,29 +6,121 @@
 {% block body %}
 <style>
     @font-face {
-        font-family: 'against.projet';
-        src: url('./fonts/against regular.otf') format('opentype'); 
-    }
+                font-family: 'against.projet';
+                src: url('{{ asset('fonts/against_regular.otf') }}') format('opentype'); 
+            }
 
-    @font-face {
-        font-family: 'quicksand';
-        src: url('./fonts/Quicksand_Light.otf') format('opentype');
-    }
+            @font-face {
+                font-family: 'quicksand';
+                src: url('{{ asset('fonts/Quicksand_Light.otf') }}') format('opentype');
+            }
 
-    /* Ajoutez ici les styles que vous avez dans votre HTML */
-    /* ... */
+            .logo {
+                position: absolute;
+                top: 3vw;
+                left: -2vw;
+                width: 40vw;
+
+                font-family: 'against.projet';
+                color: rgba(255, 255, 255, 1);                 
+                font-size: 3vw;
+                text-decoration: none;
+                text-align: center;
+            }
+
+            .image {
+                position: relative;
+                top: 2vw;
+                left: 0vw;
+                width: 6vw;
+                height: 6vw;
+                margin-right: 1vw;
+            }
+
+            body{
+                overflow: hidden;
+                margin: 0;
+                padding:0;
+                background-image: url("./image/accueilBG.jpg");
+                background-size: cover;
+                background-position: center;
+                height: 100vh;
+                width: 100vw;
+            }
+
+            .overlay{
+                position:absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1;
+            }
+
+            .main {
+                position: absolute;
+                top: 25vw;
+                left: 20vw;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 2;
+                
+                font-family: quicksand;
+                color: white; 
+                font-weight: bold;
+                font-size: 4vw;
+            }
+
+            .bouton {
+                position: relative;
+                right: 21vw;
+                margin-left: 15vw;
+                padding: 2vw;
+
+                background-color: rgb(119, 249, 119, 0.5); 
+                text-decoration : none;
+                
+                box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.65);
+                border: none; 
+                border-radius: 1vw; 
+                transition: background-color 0.3s ease; 
+                
+                color: white; 
+                font-size: 2vw; 
+                font-weight: bold; 
+            }
+          
+            .bouton:hover {
+                background-color: #77F977; 
+            }
+
+            .buttons-container {
+                position: absolute;
+                display: flex; 
+                justify-content: center;
+                align-items: center;
+                flex-direction: row; 
+                top: 32vw;
+                left: 31vw;
+                z-index: 999;
+            }
+
+    
 </style>
 
 <div class="overlay">
     <div>
-        <a href="{{ path('app_home') }}" class="logo"><img src="./icones/logo accueil.png" alt="Icône" class="image">Dater</a>
+        <a href="{{ path('app_home') }}" class="logo"><img src="{{ asset('icones/cacaboudin.jpg') }}" alt="Icône" class="image">CY Entreprise</a>
     </div>
     <div class="main">
         
     </div>
     <div class="buttons-container">
-        <a href="{{ path('app_login') }}" class="bouton">Se connecter</a>
-        <a href="{{ path('app_register') }}" class="bouton">Créer un compte</a>
+        <a class="bouton">Se connecter</a>
+        <a class="bouton">Créer un compte</a>
     </div>
 </div>
 <p style="font-family: 'quicksand'; font-size: 1vw; color: white;">
