@@ -1,0 +1,37 @@
+{# templates/home/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}CY Entreprise | Gestionanire de Bâtiment{% endblock %}
+
+{% block body %}
+<style>
+    @font-face {
+        font-family: 'against.projet';
+        src: url('./fonts/against regular.otf') format('opentype'); 
+    }
+
+    @font-face {
+        font-family: 'quicksand';
+        src: url('./fonts/Quicksand_Light.otf') format('opentype');
+    }
+
+    /* Ajoutez ici les styles que vous avez dans votre HTML */
+    /* ... */
+</style>
+
+<div class="overlay">
+    <div>
+        <a href="{{ path('app_home') }}" class="logo"><img src="./icones/logo accueil.png" alt="Icône" class="image">Dater</a>
+    </div>
+    <div class="main">
+        
+    </div>
+    <div class="buttons-container">
+        <a href="{{ path('app_login') }}" class="bouton">Se connecter</a>
+        <a href="{{ path('app_register') }}" class="bouton">Créer un compte</a>
+    </div>
+</div>
+<p style="font-family: 'quicksand'; font-size: 1vw; color: white;">
+    <strong>© Site entièrement codé par : Paul Hopsore, Flavie CISSE, Pierre-Emmanuel TISSOT, CIRCE .</strong>
+</p>
+{% endblock %}
