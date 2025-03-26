@@ -14,10 +14,10 @@ class HomeController extends AbstractController
      */
     public function index(): Response
     {
-        // On peut passer des variables à la vue Twig
-        return $this->render('home/index.html.twig', [
-            'pseudo' => $this->getUser() ? $this->getUser()->getUsername() : "-VISITOR-", // Vérifie si un utilisateur est connecté
-            'perm' => $this->getUser() ? $this->getUser()->getRoles() : [0],
+    
+        return $this->render('template.html.twig', [
+            'username' => $this->getUser() ? $this->getUser()->getUsername() : "-VISITOR-",  //Visiteur si pas connecté.
+            'role' => $this->getUser() ? implode(', ', $this->getUser()->getRoles()) : "ROLE_VISITEUR", //Role visiteur
         ]);
     }
 }
