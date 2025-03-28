@@ -7,9 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -126,6 +129,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;  // Mot de passe
 
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\Email(message: "L'adresse email '{{ value }}' n'est pas valide.")]
+    private ?string $email = null; // Email de l'utilisateur
+
 
     // Getters / Setters pour les propriétés
 
@@ -227,11 +234,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password, UserPasswordEncoderInterface $passwordEncoder): static
+{
+    // Hashage du mdp
+    $this->password = $passwordEncoder->encodePassword($this, $password);
+    return $this;
+}
+
+    public function getEmail(): ?string
     {
-        $this->password = $password;
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
         return $this;
     }
+
 
     public function eraseCredentials(): void
     {
