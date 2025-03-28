@@ -20,8 +20,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private array $roles = []; // Rôles de l'utilisateur  || ROLE_ADMIN; _COMPLEX; _SIMPLE; _VISITEUR.
+    #[ORM\Column(type: "string", length: 20, options: ["default" => "ROLE_SIMPLE"])]
+    private string $roles = "ROLE_SIMPLE"; // Rôle par défaut
 
 
     // Prop. publiques

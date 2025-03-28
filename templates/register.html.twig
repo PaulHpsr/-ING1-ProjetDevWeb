@@ -150,41 +150,35 @@
                 <img src="{{ asset('icons/logo accueil.png') }}" alt="Icône" class="image"> Dater
             </a>
         </div>
+        {# templates/registration/register.html.twig #}
+
+    <div class="overlay">
+        <div>
+            <a href="{{ path('app_home') }}" class="logo">
+                <img src="{{ asset('icons/logo accueil.png') }}" alt="Icône" class="image"> Dater
+            </a>
+        </div>
         <div class="container">
             <h1>Créer un compte</h1>
             
-            <form id="registration" action="{{ path('app_register') }}" method="POST">
-                <label for="pseudo">Pseudo :</label><br>
-                <input type="text" id="pseudo" name="pseudo" maxlength="15" required><br>
-
-                <label for="prenom">Prénom :</label><br>
-                <input type="text" id="prenom" name="prenom"><br>
-
-                <label for="nom">Nom :</label><br>
-                <input type="text" id="nom" name="nom"><br>
-
-                <label for="email">Adresse email :</label><br>
-                <input type="email" id="email" name="email" required><br>
-
-                <label for="motdepasse">Mot de passe :</label><br>
-                <input type="password" id="motdepasse" name="motdepasse" required><br>
-
-                <label for="datenaissance">Date de naissance :</label><br>
-                <input type="date" id="datenaissance" name="datenaissance" required><br>
-
-                <label for="genre">Genre :</label><br>
-                <select id="genre" name="genre" required>
-                    <option value="homme">Homme</option>
-                    <option value="femme">Femme</option>
-                    <option value="autre">Autre</option>
-                </select><br>
+            {{ form_start(form) }}
+                {{ form_row(form.username) }}
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.lastName) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.password) }}
+                {{ form_row(form.birthdate) }}
+                {{ form_row(form.sex) }}
+                {{ form_row(form.memberType) }}
+                {{ form_row(form.profilePicture) }}
 
                 <input style="margin-left: 15vw; margin-top: 3vw; height: 6vw" type="submit" value="Valider" class="bouton">
-            </form>
+            {{ form_end(form) }}
         </div>
     </div>
-    
+
     <p style="font-family: 'quicksand'; font-size: 1vw; color: white;">
         <strong>© Site entièrement codé par : Esteban Abehzele, Paul Hopsore, Ilan Dassonville, Zachary Weiss.</strong>
     </p>
 {% endblock %}
+

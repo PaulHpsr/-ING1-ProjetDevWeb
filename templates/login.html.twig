@@ -144,25 +144,19 @@
 
     <div class="overlay">
         <div>
-            <!-- Lien vers la page d'accueil -->
             <a href="{{ path('app_home') }}" class="logo">
-                <img src="{{ asset('icones/cacaboudin.jpg') }}" alt="Icône" class="image"> CY entreprise
+                <img src="{{ asset('icons/logo accueil.png') }}" alt="Icône" class="image"> Dater
             </a>
         </div>
-
+        
         <div class="container">
-            <h1>Connexion</h1>
+            <h1>Se connecter</h1>
 
-            <!-- Formulaire de connexion -->
-            <form id="login" action="{{ path('app_login') }}" method="POST">
-                <label for="pseudo">Pseudo :</label><br>
-                <input autofocus type="text" id="pseudo" name="pseudo" maxlength="15" required><br>
-
-                <label for="motdepasse">Mot de passe :</label><br>
-                <input type="password" id="motdepasse" name="motdepasse" required><br>
-
-                <input style="margin-left: 5vw; margin-top: 3vw; height: 6vw" type="submit" value="Se connecter" class="bouton">
-            </form>
+            {{ form_start(form) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.password) }}
+                <input style="margin-left: 15vw; margin-top: 3vw; height: 6vw" type="submit" value="Se connecter" class="bouton">
+            {{ form_end(form) }}
         </div>
     </div>
 
