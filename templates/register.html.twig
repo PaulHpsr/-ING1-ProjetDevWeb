@@ -59,7 +59,6 @@
                 z-index: 1;
             }
 
-
             .bouton {
                 position: relative;
                 top: -10vw;
@@ -104,7 +103,6 @@
                 margin-left: 1vw;
                 box-shadow: 0 0 2vw rgba(0, 0, 0, 0); 
                 
-                
                 color: white; 
                 font-family:'against.project'; 
                 font-size: 2vw; 
@@ -143,21 +141,22 @@
             }
         </style>
 
-
     <div class="overlay">
         <div>
             <a href="{{ path('app_home') }}" class="logo">
                 <img src="{{ asset('icons/logo accueil.png') }}" alt="Icône" class="image"> Dater
             </a>
         </div>
-        {# templates/registration/register.html.twig #}
 
-    <div class="overlay">
-        <div>
-            <a href="{{ path('app_home') }}" class="logo">
-                <img src="{{ asset('icons/logo accueil.png') }}" alt="Icône" class="image"> Dater
-            </a>
-        </div>
+        {# Affichage du message d'erreur s'il existe #}
+        {% if app.session.flashbag.has('error') %}
+            <div class="alert alert-danger">
+                {% for message in app.session.flashbag.get('error') %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <div class="container">
             <h1>Créer un compte</h1>
             
@@ -180,5 +179,5 @@
     <p style="font-family: 'quicksand'; font-size: 1vw; color: white;">
         <strong>© Site entièrement codé par : Esteban Abehzele, Paul Hopsore, Ilan Dassonville, Zachary Weiss.</strong>
     </p>
-{% endblock %}
 
+{% endblock %}

@@ -8,16 +8,17 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RegisterType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('username', TextType::class)  // Champ pour le pseudo
@@ -34,20 +35,22 @@ class RegisterType extends AbstractType
                 ],
             ])
             ->add('memberType', TextType::class)  // Champ pour le type de membre
-            ->add('profilePicture', TextType::class, [
-                'required' => false,  // Optionnel, l'utilisateur peut saisir l'URL de la photo de profil
-                'label' => 'URL de la photo de profil',
-            ])
-        ;
+            ->add('profilePicture', FileType::class, [
+                'required' => false,  // Optionnel, l'utilisateur peut télécharger une photo de profil
+                'label' => 'Photo de profil (optionnel)', 
+                'mapped' => false,  // Ne pas lier ce champ directement à l'entité User
+                'attr' => ['accept' => 'image/*'], // Limite aux images
+            ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => User::class,  // Lier ce formulaire à l'entité User
         ]);
     }
 }
+
 
 
 

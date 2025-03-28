@@ -1,16 +1,20 @@
 <?php
 
 // src/Controller/RegisterController.php
+
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\RegisterType; // Formulaire d'inscription
+use App\Form\RegisterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RegisterController extends AbstractController
 {
@@ -28,6 +32,15 @@ class RegisterController extends AbstractController
 
         // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
+            // Vérification si l'email existe déjà
+            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
+
+            if ($existingUser) {
+                // Si l'email existe déjà, afficher un message d'erreur
+                $this->addFlash('error', 'Cet email est déjà utilisé, veuillez en choisir un autre.');
+                return $this->redirectToRoute('app_register');  // Rediriger l'utilisateur vers la page d'inscription
+            }
+
             // Hacher le mot de passe avec UserPasswordHasherInterface
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
@@ -36,6 +49,36 @@ class RegisterController extends AbstractController
 
             // Associer le mot de passe haché à l'utilisateur
             $user->setPassword($hashedPassword);
+
+            // Gérer l'upload de la photo de profil
+            $profilePictureFile = $form->get('profilePicture')->getData();
+            if ($profilePictureFile) {
+                $newFilename = uniqid() . '.' . $profilePictureFile->guessExtension();
+
+                // Déplace le fichier dans le répertoire de destination
+                try {
+                    $profilePictureFile->move(
+                        $this->getParameter('profile_pictures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Handle the error
+                    $this->addFlash('error', 'Erreur lors de l\'upload de la photo de profil');
+                    return $this->redirectToRoute('app_register');
+                }
+
+                // Mettre à jour la photo de profil dans l'entité
+                $user->setProfilePicture($newFilename);
+            }
+
+            // Définir les points de l'utilisateur à 0 (nouveau membre)
+            $user->setPoints(0);
+
+            // Définir le niveau d'expérience à "débutant"
+            $user->setExperienceLevel("débutant");
+
+            // Définir le rôle par défaut à "ROLE_SIMPLE"
+            $user->setRoles(['ROLE_SIMPLE']);
 
             // Enregistrer l'utilisateur dans la base de données
             $entityManager->persist($user);
@@ -50,24 +93,8 @@ class RegisterController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-    #[Route('/delete/{id}', name: 'app_delete_user')]
-    public function delete(User $user, Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
-    {
-        // Récupérer le mot de passe en clair fourni pour confirmation
-        $plaintextPassword = $request->get('password');  // Par exemple, récupéré d'un formulaire de confirmation
-
-        // Vérifier si le mot de passe fourni est valide
-        if (!$passwordHasher->isPasswordValid($user, $plaintextPassword)) {
-            throw new AccessDeniedHttpException('Le mot de passe est incorrect');
-        }
-
-        // Si le mot de passe est valide, procéder à la suppression
-        $entityManager->remove($user);
-        $entityManager->flush();
-
-        // Retourner une réponse après la suppression
-        return new Response('Utilisateur supprimé avec succès');
-    }
 }
+
+
+
 
