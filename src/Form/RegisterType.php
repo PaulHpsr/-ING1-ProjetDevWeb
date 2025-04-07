@@ -1,6 +1,5 @@
 <?php
 
-
 // src/Form/RegisterType.php
 
 namespace App\Form;
@@ -15,42 +14,76 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class RegisterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class)  // Champ pour le pseudo
-            ->add('firstName', TextType::class)  // Champ pour le prénom
-            ->add('lastName', TextType::class)  // Champ pour le nom
-            ->add('email', EmailType::class)  // Champ pour l'email
-            ->add('password', PasswordType::class)  // Champ pour le mot de passe
-            ->add('birthdate', DateType::class)  // Champ pour la date de naissance
+            // Champs de base pour l'inscription
+            ->add('username', TextType::class, [
+                'label' => 'Pseudo',
+                'attr'  => ['placeholder' => 'Votre pseudo']
+            ])
+            ->add('firstName', TextType::class, [
+                'label' => 'Prénom',
+                'attr'  => ['placeholder' => 'Votre prénom']
+            ])
+            ->add('lastName', TextType::class, [
+                'label' => 'Nom',
+                'attr'  => ['placeholder' => 'Votre nom']
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'attr'  => ['placeholder' => 'Votre email']
+            ])
+            ->add('password', PasswordType::class, [
+                'label' => 'Mot de passe',
+                'attr'  => ['placeholder' => 'Votre mot de passe']
+            ])
+            ->add('birthdate', DateType::class, [
+                'label'  => 'Date de naissance',
+                'widget' => 'single_text',
+            ])
             ->add('sex', ChoiceType::class, [
+                'label'   => 'Sexe',
                 'choices' => [
                     'Homme' => 'homme',
                     'Femme' => 'femme',
                     'Autre' => 'autre',
                 ],
             ])
-            ->add('memberType', TextType::class)  // Champ pour le type de membre
+            ->add('memberType', TextType::class, [
+                'label' => 'Type de membre',
+                'attr'  => ['placeholder' => 'Exemple : Développeur, Testeur, etc.']
+            ])
             ->add('profilePicture', FileType::class, [
-                'required' => false,  // Optionnel, l'utilisateur peut télécharger une photo de profil
-                'label' => 'Photo de profil (optionnel)', 
-                'mapped' => false,  // Ne pas lier ce champ directement à l'entité User
-                'attr' => ['accept' => 'image/*'], // Limite aux images
-            ]);
+                'required' => false,  // Optionnel
+                'label'    => 'Photo de profil (optionnel)', 
+                'mapped'   => false,   // Ne lie pas ce champ directement à l'entité User
+                'attr'     => ['accept' => 'image/*'],
+                'constraints' => [
+                    new File([
+                        'maxSize'          => '2M',
+                        'mimeTypes'        => [
+                            'image/png',
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/gif',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez uploader une image valide (PNG, JPG, JPEG, GIF).',
+                    ])
+                ],
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,  // Lier ce formulaire à l'entité User
+            // Lier le formulaire à l'entité User
+            'data_class' => User::class,
         ]);
     }
 }
-
-
-
-

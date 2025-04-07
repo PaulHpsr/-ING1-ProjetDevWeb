@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterType;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,68 +14,67 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RegisterController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
-    {
-        // Crée un nouvel utilisateur
+    public function register(
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager,
+        EmailService $emailService
+    ): Response {
         $user = new User();
-
-        // Crée le formulaire d'inscription basé sur l'entité User
         $form = $this->createForm(RegisterType::class, $user);
 
-        // Gérer les soumissions du formulaire
         $form->handleRequest($request);
 
-        // Si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {
             // Vérification si l'email existe déjà
             $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
-
             if ($existingUser) {
-                // Si l'email existe déjà, afficher un message d'erreur
                 $this->addFlash('error', 'Cet email est déjà utilisé, veuillez en choisir un autre.');
-                return $this->redirectToRoute('app_register');  // Rediriger l'utilisateur vers la page d'inscription
+                return $this->render('register.html.twig', [
+                    'form' => $form->createView(),
+                ]);
             }
 
-            // Hacher le mot de passe avec UserPasswordHasherInterface
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $user->getPassword() // Récupérer le mot de passe en texte brut depuis le formulaire
-            );
+            // Vérification si le nom d'utilisateur existe déjà
+            $existingUsername = $entityManager->getRepository(User::class)->findOneBy(['username' => $user->getUsername()]);
+            if ($existingUsername) {
+                $this->addFlash('error', 'Ce pseudo est déjà utilisé, veuillez en choisir un autre.');
+                return $this->render('register.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
 
-            // Associer le mot de passe haché à l'utilisateur
+            // Hacher le mot de passe
+            $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($hashedPassword);
+
+            // Définir le statut de l'utilisateur à "pending"
+            $user->setStatus('pending');
 
             // Gérer l'upload de la photo de profil
             $profilePictureFile = $form->get('profilePicture')->getData();
             if ($profilePictureFile) {
                 $newFilename = uniqid() . '.' . $profilePictureFile->guessExtension();
 
-                // Déplace le fichier dans le répertoire de destination
                 try {
                     $profilePictureFile->move(
                         $this->getParameter('profile_pictures_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // Handle the error
                     $this->addFlash('error', 'Erreur lors de l\'upload de la photo de profil');
                     return $this->redirectToRoute('app_register');
                 }
 
-                // Mettre à jour la photo de profil dans l'entité
                 $user->setProfilePicture($newFilename);
             }
 
-            // Définir les points de l'utilisateur à 0 (nouveau membre)
+            // Définir les points de l'utilisateur à 0 et son niveau d'expérience à "débutant"
             $user->setPoints(0);
-
-            // Définir le niveau d'expérience à "débutant"
             $user->setExperienceLevel("débutant");
 
             // Définir le rôle par défaut à "ROLE_SIMPLE"
@@ -84,17 +84,21 @@ class RegisterController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Rediriger l'utilisateur après l'enregistrement
-            return $this->redirectToRoute('app_login');  // Redirige vers la page de connexion
+            // Afficher un message de succès
+            $this->addFlash('success', 'Votre inscription a bien été enregistrée, en attente de validation.');
+
+            // Envoyer un email à l'utilisateur pour confirmer son inscription
+            $emailService->sendEmail(
+                $user->getEmail(),
+                'Confirmation de votre inscription',
+                'Merci de vous être inscrit. Votre compte est actuellement en attente de validation par un administrateur.'
+            );
+
+            return $this->redirectToRoute('app_login');
         }
 
-        // Rendre la vue avec le formulaire
         return $this->render('register.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 }
-
-
-
-

@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche | Dater{% endblock %}
+
+{% block body %}
+<style>
+    @font-face {
+        font-family: 'quicksand';
+        src: url('{{ asset('fonts/Quicksand_Light.otf') }}') format('opentype');
+    }
+
+    .main { 
+        position: absolute;
+        top: 20vh;
+        left: 25vw;
+    }
+
+    header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 18%;
+        z-index: 500;
+        padding: 0;
+        color: black;
+        background: rgba(66, 66, 66, 1);
+        box-shadow: 0vh 0 4vh 0.5vh rgba(9, 22, 36, 0.37);
+    }
+
+    button {
+        padding: 0;
+    }
+
+    #search-box {
+        position: absolute;
+        top: 6vh;
+        left: 30vw;
+        width: 30vw;
+        padding: 0.5vh 1vw 0.5vh;
+        
+        border-radius: 1vh;
+        border-style: hidden;
+        outline: transparent;
+        font-family: 'quicksand';
+        font-size: 3vh;
+    }
+
+    #filter-box {
+        position: absolute;
+        top: 1.5vh;
+        left: 35vw;
+        width: 10vw;
+        padding: 0.5vh 1vw 0.5vh;
+       
+        border-radius: 1vh;
+        border-style: hidden;
+        outline: transparent;
+        font-family: 'quicksand';
+        font-size: 2vh;
+    }
+
+    #button-box {
+        position: absolute;
+        top: 6.3vh;
+        right: 38.2vw;
+        width: 4vh;
+        height: 4vh;
+        
+        border-radius: 5vh;
+        border-style: hidden;
+        color: black;
+        background-color: rgba(255, 255, 255, 0.413);
+        
+        cursor: pointer;
+        font-size: 0;
+    }
+
+    #button-box:hover {
+        background-color: #85858500;
+        box-shadow: 0 0 0 0 rgba(180, 180, 180, 0);
+    }
+
+    .icone {
+        position: relative;
+        top: 0vh;
+        left: 0vh;
+        border-style: hidden;
+        width: 3vh;
+        height: 3vh;
+        opacity: 0.8;
+    }
+
+    /* Style pour les thèmes */
+    body.theme-light {
+        background-color: white;
+        color: black;
+    }
+
+    body.theme-dark {
+        background-color: #121212;
+        color: white;
+    }
+</style>
+
+<header>
+    <form action="{{ path('app_recherche') }}" method="get">
+    <input type="text" id="search-box" name="recherche" placeholder="Chercher">
+    <select id="filter-box" name="filter">
+        <option value="none">Sans filtre</option>
+        <option value="user">Utilisateur</option>
+        <option value="objet">Objet connecté</option>
+        <option value="infos">Infos</option>
+    </select>
+    <button type="submit">Rechercher</button>
+</form>
+
+
+    <!-- Bouton de changement de thème -->
+    <div style="position: absolute; top: 2vh; right: 2vw;">
+        <button id="theme-toggle" onclick="toggleTheme()">
+            <img src="{{ asset(app.user.color == 1 ? 'icones/white/moon.png' : 'icones/black/sun.png') }}" alt="Changer de thème" style="width: 2vh; height: 2vh;">
+        </button>
+    </div>
+</header>
+
+<script>
+    // Fonction JavaScript pour changer le thème
+    function toggleTheme() {
+    let currentTheme = document.body.classList.contains('theme-dark') ? 'theme-light' : 'theme-dark';
+    document.body.classList.remove('theme-light', 'theme-dark');
+    document.body.classList.add(currentTheme);
+
+    // Envoi de la requête Ajax pour mettre à jour le thème dans la base de données
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/update-theme', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ color: currentTheme === 'theme-dark' ? 1 : 0 }));
+}
+</script>
+
+{% endblock %}

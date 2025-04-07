@@ -1,0 +1,69 @@
+{# templates/admin/list_signalements.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des signalements{% endblock %}
+
+{% block body %}
+<h1>Liste des signalements</h1>
+
+<!-- Affichage des signalements -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Raison</th>
+            <th>Utilisateur signalé</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for signalement in signalements %}
+        <tr>
+            <td>{{ signalement.id }}</td>
+            <td>{{ signalement.reason }}</td>
+            <td>{{ signalement.reportedUser.username }}</td>
+            <td>
+                <a href="{{ path('admin_supprimer_signalement', {'id': signalement.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce signalement ?');">
+                    Supprimer
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">Aucun signalement trouvé.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .btn:hover {
+        background-color: #c9302c;
+    }
+</style>

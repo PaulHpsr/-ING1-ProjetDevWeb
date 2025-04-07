@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats de la recherche{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Résultats de la recherche</h1>
+
+    <!-- Résultats des utilisateurs -->
+    <h2>Utilisateurs</h2>
+    <div class="search-results">
+        {% for user in users %}
+            <div class="result-card">
+                <a href="{{ path('app_user_profile', {'id': user.id}) }}">
+                    <img src="{{ asset(user.profilePicture ? 'uploads/profile_pictures/' ~ user.profilePicture : 'images/default-profile.png') }}" alt="Photo de profil" class="result-image">
+                    <div class="result-info">
+                        <h3>{{ user.username }}</h3>
+                        <p>{{ user.firstName }} {{ user.lastName }}</p>
+                        <p>Niveau : {{ user.experienceLevel }}</p>
+                    </div>
+                </a>
+            </div>
+        {% else %}
+            <p class="text-muted">Aucun utilisateur trouvé.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Résultats des objets connectés -->
+    <h2 class="mt-4">Objets Connectés</h2>
+    <div class="search-results">
+        {% for objet in objets %}
+            <div class="result-card">
+                <a href="{{ path('app_objet_detail', {'id': objet.id}) }}">
+                    <div class="result-info">
+                        <h3>{{ objet.nom }}</h3>
+                        <p>Consommation : {{ objet.consommationEnergetique }} kWh</p>
+                        <p>Type : {{ objet.type }}</p>
+                    </div>
+                </a>
+            </div>
+        {% else %}
+            <p class="text-muted">Aucun objet connecté trouvé.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Résultats des infos -->
+    <h2 class="mt-4">Infos</h2>
+    <div class="search-results">
+        {% for info in infos %}
+            <div class="result-card">
+                
+                    <div class="result-info">
+                        <h3>{{ info.title }}</h3>
+                        <p>{{ info.content|slice(0, 100) }}...</p>
+                    </div>
+                </a>
+            </div>
+        {% else %}
+            <p class="text-muted">Aucune info trouvée.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

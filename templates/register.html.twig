@@ -5,17 +5,42 @@
 {% block body %}
 
 <style>
-            @font-face {
-                font-family: 'against.projet';
-                src: url('./fonts/against regular.otf') format('opentype'); 
+    @font-face {
+        font-family: 'against.projet';
+        src: url('{{ asset('fonts/against_regular.otf') }}') format('opentype'); 
+    }
+
+    @font-face {
+        font-family: 'quicksand';
+        src: url('{{ asset('fonts/Quicksand_Light.otf') }}') format('opentype');
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        width: 100vw;
+        background-image: url("./image/bg_ahri2.jpg");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .overlay{
+                position:absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1;
             }
 
-            @font-face {
-                font-family: 'quicksand';
-                src: url('./fonts/Quicksand_Light.otf') format('opentype');
-            }
-
-            .logo {
+    .logo {
                 position: absolute;
                 top: 3vw;
                 left: 0vw;
@@ -28,156 +53,139 @@
                 text-align: center;
             }
 
-            .image {
-                position: relative;
+    .image {
+        position: relative;
                 top: 2vw;
                 left: 0vw;
                 width: 6vw;
                 height: 6vw;
                 margin-right: 1vw;
-            }
+    }
 
-            body{
-                overflow: hidden;
-                margin: 0;
-                padding:0;
-                background-image: url("./image/bg_ahri2.jpg");
-                background-size: cover;
-                background-position: center;
-                height: 100vh;
-                width: 100vw;
-            }
+    /* Form Container (bottom-left positioning) */
+    .container {
+        position: absolute;
+        bottom: 1vw;
+        left: 35vw;
+        width: 40vw;
+        padding: 2rem;
+        background-color: rgba(0, 0, 0, 0.8);
+        border-radius: 0.5rem;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.7);
+        text-align: left;
+        color: white;
+    }
 
-            .overlay{
-                position:absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                z-index: 1;
-            }
+    /* Title */
+    h1 {
+        font-family: 'against.projet';
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: white;
+    }
 
-            .bouton {
-                position: relative;
-                top: -10vw;
-                right: -10vw;
-                padding: 0vw 2vw 0vw 2vw;
+    /* Form Styles */
+    label {
+        font-family: 'quicksand';
+        font-size: 1rem;
+        color: white;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
 
-                background-color: rgb(160, 250, 119, 0.5);
-                text-decoration : none;
-                
-                box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.65);
-                border: none; 
-                border-radius: 1vw; 
-                transition: background-color 0.3s ease; 
-                
-                color: white; 
-                font-size: 2vw; 
-                font-weight: bold; 
-            }
-          
-            .bouton:hover {
-                background-color: rgb(220, 50, 200, 0.1);
-            }
+    input, select {
+        width: 100%;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ddd;
+        font-size: 1rem;
+    }
 
-            .container {
-                position: absolute;
-                top: 15vw;
-                left: 10vw;
-                width: 20vw;
-                height: 30vw;
-                background-color: rgba(0, 0, 0, 0.7);
-                border-radius: 3vw; 
-                padding: 1vw;
-                box-shadow: 0 0 3vw rgba(0, 0, 0, 0.5); 
+    /* Button Styling */
+    .bouton {
+        width: 100%;
+        padding: 1rem;
+        background-color: rgb(160, 250, 119, 0.8);
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+        transition: background-color 0.3s ease;
+    }
 
-                text-align: left;
-            }
+    .bouton:hover {
+        background-color: rgb(220, 50, 200, 0.1);
+    }
 
-            h1{
-                position: relative;
-                top: -1vw;
-                margin-bottom: 1vw; 
-                margin-left: 1vw;
-                box-shadow: 0 0 2vw rgba(0, 0, 0, 0); 
-                
-                color: white; 
-                font-family:'against.project'; 
-                font-size: 2vw; 
-                text-align: left;
-                font-weight: bold;
-            }
+    /* Flexbox for splitting the form into two parts */
+    .form-group {
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+    }
 
-            form {
-                font-size: 0;
-            }
+    .form-group > div {
+        width: 48%;
+    }
 
-            label {
-                margin-left:3vw;
-                
+    /* Footer */
+    .footer {
+        position: absolute;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'quicksand';
+        font-size: 1rem;
+        color: white;
+        text-align: center;
+    }
+</style>
 
-                color: white; 
-                font-family:'quicksand';
-                font-size: 1vw; 
-            }
-
-            input, select {
-                height: 1.3vw; 
-                width: auto; 
-                margin-top: 0.5vw; 
-                margin-bottom: 0.7vw;
-                margin-left:2vw;
-
-                border-style: hidden;
-                
-                padding: 0;
-                padding-left: 1vw;
-
-
-                border-radius: 1vw;
-                font-size: 1vw; 
-            }
-        </style>
-
-    <div class="overlay">
+<div class="overlay">
+    {% for label, messages in app.flashes %}
+     {% for message in messages %}
+         <div class="alert alert-{{ label }}">
+             {{ message }}
+           </div>
+        {% endfor %}
+    {% endfor %}
         <div>
-            <a href="{{ path('app_home') }}" class="logo">
-                <img src="{{ asset('icons/logo accueil.png') }}" alt="Icône" class="image"> Dater
+            <a href="{{ path('app_landing') }}" class="logo">
+                <img src="{{ asset('icones/cacaboudin.jpg') }}" alt="Icône" class="image"> Dater
             </a>
         </div>
 
-        {# Affichage du message d'erreur s'il existe #}
-        {% if app.session.flashbag.has('error') %}
-            <div class="alert alert-danger">
-                {% for message in app.session.flashbag.get('error') %}
-                    <p>{{ message }}</p>
-                {% endfor %}
+    <!-- Form Container -->
+    <div class="container">
+        <h1>Créer un compte</h1>
+
+        {{ form_start(form) }}
+            <div class="form-group">
+                <div>
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.lastName) }}
+                    {{ form_row(form.email) }}
+                </div>
+                <div>
+                    {{ form_row(form.password) }}
+                    {{ form_row(form.birthdate) }}
+                    {{ form_row(form.sex) }}
+                    {{ form_row(form.memberType) }}
+                </div>
             </div>
-        {% endif %}
 
-        <div class="container">
-            <h1>Créer un compte</h1>
-            
-            {{ form_start(form) }}
-                {{ form_row(form.username) }}
-                {{ form_row(form.firstName) }}
-                {{ form_row(form.lastName) }}
-                {{ form_row(form.email) }}
-                {{ form_row(form.password) }}
-                {{ form_row(form.birthdate) }}
-                {{ form_row(form.sex) }}
-                {{ form_row(form.memberType) }}
-                {{ form_row(form.profilePicture) }}
+            {{ form_row(form.profilePicture) }}
 
-                <input style="margin-left: 15vw; margin-top: 3vw; height: 6vw" type="submit" value="Valider" class="bouton">
-            {{ form_end(form) }}
-        </div>
+            <button type="submit" class="bouton">Valider</button>
+        {{ form_end(form) }}
     </div>
-
-    <p style="font-family: 'quicksand'; font-size: 1vw; color: white;">
-        <strong>© Site entièrement codé par : Esteban Abehzele, Paul Hopsore, Ilan Dassonville, Zachary Weiss.</strong>
-    </p>
+</div>
 
 {% endblock %}

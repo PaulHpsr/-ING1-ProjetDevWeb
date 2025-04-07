@@ -4,41 +4,43 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Repository\ObjetsConnectesRepository;
 
 #[ORM\Entity(repositoryClass: ObjetsConnectesRepository::class)]
 class ObjetsConnectes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: "integer")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom de l'objet connecté ne peut pas être vide.")]
     private ?string $nom = null;  // Nom de l'objet connecté
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le type de l'objet est requis.")]
     private ?string $type = null;  // Type de l'objet (thermostat, caméra, prise, etc.)
 
-    //Propriétés spécifiques : 
-        //Thermostats
-            #[ORM\Column(type: "float", nullable: true)]
-            private ?float $temperatureActuelle = null; // Température actuelle (thermostat seulement)
+    // Propriétés spécifiques :
 
-            #[ORM\Column(type: "float", nullable: true)]
-            private ?float $temperatureCible = null; // Température cible (thermostat seulement)
-        
-        //Distributeurs / Photocopieuses
-            #[ORM\Column(type: "integer", nullable: true)]
-            private ?int $niveauStockMAX = null; // Niveau de stock MAX
+    // Thermostats
+    #[ORM\Column(type: "float", nullable: true)]
+    private ?float $temperatureActuelle = null; // Température actuelle (thermostat seulement)
 
-            #[ORM\Column(type: "integer", nullable: true)]
-            private ?int $niveauStock = null; // Niveau de stock actuel
+    #[ORM\Column(type: "float", nullable: true)]
+    private ?float $temperatureCible = null; // Température cible (thermostat seulement)
 
+    // Distributeurs / Photocopieuses
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $niveauStockMAX = null; // Niveau de stock MAX
 
-        //Portes
-            #[ORM\Column(length: 255, nullable: true)]
-            private ?string $etatPorte = null; // État de la porte (ouverte, fermée, verrouillée)
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $niveauStock = null; // Niveau de stock actuel
 
+    // Portes
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $etatPorte = null; // État de la porte (ouverte, fermée, verrouillée)
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $connectivite = null; // Connectivité (Wi-Fi, Bluetooth, Zigbee, etc.)
@@ -50,173 +52,176 @@ class ObjetsConnectes
     private ?\DateTimeInterface $derniereInteraction = null; // Dernière interaction avec l'objet
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La marque de l'objet est requise.")]
     private ?string $marque = null; // Marque de l'objet connecté
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'état de l'objet est requis.")]
     private ?string $etat = null; // État de l'objet (Connecté/Déconnecté)
 
     #[ORM\Column(type: "float", nullable: true)]
     private ?float $consommationEnergetique = null; // Consommation énergétique de l'objet en kWh 
 
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $mode = null; // Mode de fonctionnement (ex. : automatique, éco)
 
-    // Getters and Setters
-
+    // ---------------------------
+    // GETTERS & SETTERS
+    // ---------------------------
+    
     public function getId(): ?int
     {
         return $this->id;
     }
-
+    
     public function getNom(): ?string
     {
         return $this->nom;
     }
-
+    
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
         return $this;
     }
-
+    
     public function getType(): ?string
     {
         return $this->type;
     }
-
+    
     public function setType(string $type): static
     {
         $this->type = $type;
         return $this;
     }
-
+    
     public function getTemperatureActuelle(): ?float
     {
         return $this->temperatureActuelle;
     }
-
+    
     public function setTemperatureActuelle(?float $temperatureActuelle): static
     {
         $this->temperatureActuelle = $temperatureActuelle;
         return $this;
     }
-
+    
     public function getTemperatureCible(): ?float
     {
         return $this->temperatureCible;
     }
-
+    
     public function setTemperatureCible(?float $temperatureCible): static
     {
         $this->temperatureCible = $temperatureCible;
         return $this;
     }
-
-    public function getConnectivite(): ?string
+    
+    public function getNiveauStockMAX(): ?int
     {
-        return $this->connectivite;
+        return $this->niveauStockMAX;
     }
-
-    public function setConnectivite(?string $connectivite): static
+    
+    public function setNiveauStockMAX(?int $niveauStockMAX): static
     {
-        $this->connectivite = $connectivite;
+        $this->niveauStockMAX = $niveauStockMAX;
         return $this;
     }
-
-    public function getEtatBatterie(): ?int
-    {
-        return $this->etatBatterie;
-    }
-
-    public function setEtatBatterie(?int $etatBatterie): static
-    {
-        $this->etatBatterie = $etatBatterie;
-        return $this;
-    }
-
-    public function getDerniereInteraction(): ?\DateTimeInterface
-    {
-        return $this->derniereInteraction;
-    }
-
-    public function setDerniereInteraction(?\DateTimeInterface $derniereInteraction): static
-    {
-        $this->derniereInteraction = $derniereInteraction;
-        return $this;
-    }
-
-    public function getMarque(): ?string
-    {
-        return $this->marque;
-    }
-
-    public function setMarque(string $marque): static
-    {
-        $this->marque = $marque;
-        return $this;
-    }
-
-    public function getEtat(): ?string
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(string $etat): static
-    {
-        $this->etat = $etat;
-        return $this;
-    }
-
-    public function getConsommationEnergetique(): ?float
-    {
-        return $this->consommationEnergetique;
-    }
-
-    public function setConsommationEnergetique(?float $consommationEnergetique): static
-    {
-        $this->consommationEnergetique = $consommationEnergetique;
-        return $this;
-    }
-
+    
     public function getNiveauStock(): ?int
     {
         return $this->niveauStock;
     }
-
+    
     public function setNiveauStock(?int $niveauStock): static
     {
         $this->niveauStock = $niveauStock;
         return $this;
     }
-
-    public function getNiveauStockMAX(): ?int
-    {
-        return $this->niveauStockMAX;
-    }
-
-    public function setNiveauStockMAX(?int $niveauStockMAX): static
-    {
-        $this->niveauStock = $niveauStockMAX;
-        return $this;
-    }
-
+    
     public function getEtatPorte(): ?string
     {
         return $this->etatPorte;
     }
-
+    
     public function setEtatPorte(?string $etatPorte): static
     {
         $this->etatPorte = $etatPorte;
         return $this;
     }
-
+    
+    public function getConnectivite(): ?string
+    {
+        return $this->connectivite;
+    }
+    
+    public function setConnectivite(?string $connectivite): static
+    {
+        $this->connectivite = $connectivite;
+        return $this;
+    }
+    
+    public function getEtatBatterie(): ?int
+    {
+        return $this->etatBatterie;
+    }
+    
+    public function setEtatBatterie(?int $etatBatterie): static
+    {
+        $this->etatBatterie = $etatBatterie;
+        return $this;
+    }
+    
+    public function getDerniereInteraction(): ?\DateTimeInterface
+    {
+        return $this->derniereInteraction;
+    }
+    
+    public function setDerniereInteraction(?\DateTimeInterface $derniereInteraction): static
+    {
+        $this->derniereInteraction = $derniereInteraction;
+        return $this;
+    }
+    
+    public function getMarque(): ?string
+    {
+        return $this->marque;
+    }
+    
+    public function setMarque(string $marque): static
+    {
+        $this->marque = $marque;
+        return $this;
+    }
+    
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+    
+    public function setEtat(string $etat): static
+    {
+        $this->etat = $etat;
+        return $this;
+    }
+    
+    public function getConsommationEnergetique(): ?float
+    {
+        return $this->consommationEnergetique;
+    }
+    
+    public function setConsommationEnergetique(?float $consommationEnergetique): static
+    {
+        $this->consommationEnergetique = $consommationEnergetique;
+        return $this;
+    }
+    
     public function getMode(): ?string
     {
         return $this->mode;
     }
-
+    
     public function setMode(?string $mode): static
     {
         $this->mode = $mode;

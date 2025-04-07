@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérification des utilisateurs | Admin{% endblock %}
+
+{% block body %}
+
+    <h1>Vérification des utilisateurs</h1>
+
+    {% if app.session.flashbag.has('success') %}
+        <div class="alert alert-success">
+            {% for message in app.session.flashbag.get('success') %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Date de naissance</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in pendingUsers %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.firstName }} {{ user.lastName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.birthdate|date('d/m/Y') }}</td>
+                    <td>
+                        <form action="{{ path('admin_validate_user', { 'id': user.id }) }}" method="POST">
+                            <button type="submit" class="btn btn-primary">Valider</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

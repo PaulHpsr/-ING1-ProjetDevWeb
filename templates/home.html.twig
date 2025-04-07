@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page d'accueil | Dater{% endblock %}
+
+{% block body %}
+{% include 'recherche.html.twig' %}
+{% include 'template.html.twig' %}
+    <div class="main">
+
+        {# Affichage des informations/actualités du bâtiment #}
+        <div class="actualites">
+            <h2>Actualités du Bâtiment</h2>
+            {% for info in infos %}
+                <div class="actualite">
+                    <h3>{{ info.title }}</h3>
+                    <p>{{ info.content|slice(0, 200) }}...</p>
+                    <p><em>Publié par {{ info.publisher.username }} le {{ info.publishDate|date('d/m/Y') }}</em></p>
+                </div>
+            {% else %}
+                <p>Aucune actualité disponible.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}

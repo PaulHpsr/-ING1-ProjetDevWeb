@@ -1,0 +1,21 @@
+{# templates/objets_connectes/list.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Objets Connectés{% endblock %}
+
+{% block body %}
+    <h1>Liste des objets connectés</h1>
+
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COMPLEX') %}
+        <a href="{{ path('objets_connectes_add') }}" class="btn btn-primary">Ajouter un objet connecté</a>
+    {% endif %}
+
+    <ul>
+        {% for objet in objets %}
+            <li>
+                <a href="{{ path('objets_connectes_show', {'id': objet.id}) }}">{{ objet.nom }}</a>
+                - {{ objet.type }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

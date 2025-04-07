@@ -9,14 +9,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     
-    #[Route('/', name: 'app_home')]
+    #[Route('/landing', name: 'app_landing')]
 
     public function index(): Response
-    {
-    
-        return $this->render('home/index.html.twig', [
-            'username' => $this->getUser() ? $this->getUser()->getUsername() : "-VISITOR-",  //Visiteur si pas connecté.
-            'role' => $this->getUser() ? implode(', ', $this->getUser()->getRoles()) : "ROLE_VISITEUR", //Role visiteur
-        ]);
-    }
+{
+    $user = $this->getUser();
+
+    return $this->render('home/index.html.twig', [
+        'username' => $user ? $user->getUsername() : "-VISITOR-",
+        'role'     => $user ? implode(', ', $user->getRoles()) : "ROLE_VISITEUR",
+    ]);
+}
+
 }

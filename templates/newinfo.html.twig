@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une Nouvelle Info{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center">Créer une Nouvelle Info</h1>
+
+        {% if app.flashes('error') is not empty %}
+            <div class="alert alert-danger">
+                {% for message in app.flashes('error') %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="card shadow-sm p-4">
+            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+                <div class="form-group mb-3">
+                    {{ form_label(form.title, 'Titre', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.title) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_label(form.content, 'Contenu', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.content, {'attr': {'class': 'form-control', 'rows': 6}}) }}
+                    {{ form_errors(form.content) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_label(form.publishDate, 'Date de Publication', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.publishDate, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.publishDate) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_label(form.publisher, 'Publié par', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.publisher, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.publisher) }}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ form_label(form.imagePath, 'Image', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.imagePath, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.imagePath) }}
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Créer</button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

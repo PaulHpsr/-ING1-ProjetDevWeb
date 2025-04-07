@@ -7,12 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+use DateTime;
+use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
-
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -20,23 +21,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: "string", length: 20, options: ["default" => "ROLE_SIMPLE"])]
-    private string $roles = "ROLE_SIMPLE"; // Rôle par défaut
+    // Stocké sous forme de JSON pour permettre de gérer plusieurs rôles
+    #[ORM\Column(type: "json")]
+    private array $roles = ['ROLE_SIMPLE'];
 
+    #[ORM\Column(type: "string", length: 20, options: ["default" => "pending"])]
+    private string $status = "pending";  // "pending" pour en attente de validation, "active" pour validé
 
-    // Prop. publiques
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+        return $this;
+    }
+    
+    // Propriétés publiques
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;  // Pseudonyme (login)
 
-
     #[ORM\Column(type: "integer")]
-    private ?int $age = null;  // Age de l'utilisateur
-
+    private ?int $age = null;  // Âge de l'utilisateur
 
     #[ORM\Column(type: "string", length: 20)]
     private ?string $sex = null;  // Sexe/Genre
-
 
     #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $birthdate = null;  // Date de naissance
@@ -44,42 +56,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255)]
     private ?string $memberType = null;  // Type de membre (développeur, testeur, etc.)
 
-
     #[ORM\Column(type: "string", nullable: true)]
     private ?string $profilePicture = null;  // URL de la photo de profil
 
-    //Système de pts
+    // Système de points
     #[ORM\Column(type: "integer", options: ["default" => 0])]
     private int $points = 0;  
 
-
+    // Couleur du site (par exemple un code ou une valeur numérique)
+    #[ORM\Column(type: "integer", options: ["default" => 0])]
+    private int $color = 0; 
 
     #[ORM\Column(type: "string", length: 20, options: ["default" => "débutant"])]
     private string $experienceLevel = "débutant"; // débutant, intermédiaire, avancé, expert
 
-    // Méthodes de gestion des points et des niveaux
+    // Gestion des points et mise à jour du niveau d'expérience
     public function getPoints(): int
     {
         return $this->points;
     }
 
+    public function getColor(): int
+    {
+        return $this->color;
+    }
+
+    public function setColor(int $color): static
+    {
+        $this->color = $color;
+        return $this;
+    }
+
     public function setPoints(int $points): static
     {
         $this->points = $points;
-
-        // Màj de l'expérience en fonct° des pts
         $this->updateExperienceLevel();
-
         return $this;
     }
 
     public function addPoints(int $points): static
     {
         $this->points += $points;
-
-        // Màj de l'xp de l'utilisateur
         $this->updateExperienceLevel();
-
         return $this;
     }
 
@@ -94,7 +112,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // Màj du niveau d'expérience en fonction des points
+    // Mise à jour du niveau d'expérience en fonction des points obtenus
     private function updateExperienceLevel(): void
     {
         if ($this->points >= 10) {
@@ -112,19 +130,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
     }
 
+    // Retourne les rôles de l'utilisateur en ajoutant toujours "ROLE_USER"
     public function getRoles(): array
     {
         return array_merge($this->roles, ['ROLE_USER']);
     }
 
+    public function setRoles(array $roles): self
+{
+    $this->roles = $roles;
+    return $this;
+}
 
-    // Prop. privées
+    // Propriétés privées
 
     #[ORM\Column(length: 255)]
-    private ?string $firstName = null;  // Prénom de l'utilisateur (privé)
+    private ?string $firstName = null;  // Prénom de l'utilisateur
 
     #[ORM\Column(length: 255)]
-    private ?string $lastName = null;  // Nom de l'utilisateur (privé)
+    private ?string $lastName = null;  // Nom de l'utilisateur
 
     #[ORM\Column]
     private ?string $password = null;  // Mot de passe
@@ -133,8 +157,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(message: "L'adresse email '{{ value }}' n'est pas valide.")]
     private ?string $email = null; // Email de l'utilisateur
 
-
-    // Getters / Setters pour les propriétés
+    // Getters / Setters pour les propriétés publiques et privées
 
     public function getId(): ?int
     {
@@ -179,9 +202,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->birthdate;
     }
 
-    public function setBirthdate(\DateTimeInterface $birthdate): static
+    public function setBirthdate(DateTimeInterface $birthdate): static
     {
         $this->birthdate = $birthdate;
+
+     // Calculer l'âge à partir de la date de naissance
+        $now = new DateTime();
+        $this->age = $now->diff($birthdate)->y;
+
         return $this;
     }
 
@@ -234,12 +262,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password, UserPasswordEncoderInterface $passwordEncoder): static
-{
-    // Hashage du mdp
-    $this->password = $passwordEncoder->encodePassword($this, $password);
-    return $this;
-}
+    
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+        return $this;
+    }
 
     public function getEmail(): ?string
     {
@@ -252,15 +280,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
     public function eraseCredentials(): void
     {
-        // Méthode vide pour effacer les données sensibles
+        // Méthode destinée à effacer les données sensibles (par exemple un plainPassword temporaire)
     }
 
-    // Méthode pour l'authentification
+    // Méthode pour l'authentification (identifiant unique)
     public function getUserIdentifier(): string
     {
-        return $this->username; // Utilisé pour l'authentification
+        return (string) $this->username;
     }
 }

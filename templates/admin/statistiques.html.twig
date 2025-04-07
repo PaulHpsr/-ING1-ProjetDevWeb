@@ -1,0 +1,25 @@
+{# templates/admin/statistiques.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques Admin{% endblock %}
+
+{% block body %}
+    <h1>Statistiques de la plateforme</h1>
+
+    <div>
+        <h2>Rapports Avancés</h2>
+        <p>Total des utilisateurs : {{ totalUsers }}</p>
+        <p>Total des objets connectés : {{ totalObjets }}</p>
+        <p>Total des signalements : {{ totalSignalements }}</p>
+        <p>Consommation énergétique totale : {{ totalConsommationEnerg }} kWh</p>
+        <p>Taux de connexion des utilisateurs : {{ tauxConnexion }}%</p>
+    </div>
+
+    <div>
+        <h2>Exporter les rapports</h2>
+        <a href="{{ path('admin_export_csv') }}">Exporter en CSV</a> | 
+        <a href="{{ path('admin_export_pdf') }}">Exporter en PDF</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{# templates/objets_connectes/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ objet.nom }} - Détails{% endblock %}
+
+{% block body %}
+    <h1>Détails de l'objet connecté : {{ objet.nom }}</h1>
+
+    <p>Type : {{ objet.type }}</p>
+    <p>Marque : {{ objet.marque }}</p>
+    <p>État : {{ objet.etat }}</p>
+    <p>Consommation énergétique : {{ objet.consommationEnergetique }} kWh</p>
+
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COMPLEX') %}
+        <a href="{{ path('objets_connectes_edit', {'id': objet.id}) }}" class="btn btn-secondary">Modifier</a>
+    {% endif %}
+{% endblock %}
