@@ -3,71 +3,77 @@
 {% block title %}Tableau de Bord{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Tableau de Bord</h1>
+<div class="container mt-4">
+    <h1 class="text-center">Tableau de Bord</h1>
 
-        <div class="statistics-section">
-            <h2>Consommation Énergétique</h2>
-            
-            <!-- Graphique pour la consommation énergétique quotidienne -->
-            <canvas id="dailyConsumptionChart" width="400" height="200"></canvas>
-
-            <!-- Graphique pour la consommation énergétique hebdomadaire -->
-            <canvas id="weeklyConsumptionChart" width="400" height="200"></canvas>
-        </div>
-
-        <!-- Inclure Chart.js -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="statistics-section mt-5">
+        <h2>Consommation Énergétique</h2>
         
-        <script>
-            // Graphique de la consommation quotidienne
-            const dailyConsumptionCtx = document.getElementById('dailyConsumptionChart').getContext('2d');
-            const dailyConsumptionChart = new Chart(dailyConsumptionCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Aujourd\'hui'],
-                    datasets: [{
-                        label: 'Consommation énergétique (kWh)',
-                        data: [{{ dailyConsumption }}], // Données de consommation quotidienne
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+        <!-- Graphique pour la consommation énergétique quotidienne -->
+        <canvas id="dailyConsumptionChart" width="400" height="200"></canvas>
 
-            // Graphique de la consommation hebdomadaire
-            const weeklyConsumptionCtx = document.getElementById('weeklyConsumptionChart').getContext('2d');
-            const weeklyConsumptionChart = new Chart(weeklyConsumptionCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'], // Exemple de jours de la semaine
-                    datasets: [{
-                        label: 'Consommation énergétique (kWh)',
-                        data: [{{ weeklyConsumption }}], // Données de consommation hebdomadaire
-                        fill: false,
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        </script>
-
+        <!-- Graphique pour la consommation énergétique hebdomadaire -->
+        <canvas id="weeklyConsumptionChart" width="400" height="200"></canvas>
     </div>
+
+    <!-- Inclure Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Graphique de la consommation quotidienne
+        const dailyConsumptionCtx = document.getElementById('dailyConsumptionChart').getContext('2d');
+        new Chart(dailyConsumptionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Aujourd\'hui'],
+                datasets: [{
+                    label: 'Consommation énergétique (kWh)',
+                    data: [{{ dailyConsumption }}], // Données de consommation quotidienne
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Graphique de la consommation hebdomadaire
+        const weeklyConsumptionCtx = document.getElementById('weeklyConsumptionChart').getContext('2d');
+        new Chart(weeklyConsumptionCtx, {
+            type: 'line',
+            data: {
+                labels: {{ consumptionPerDay|map(day => day.day)|json_encode|raw }}, // Jours de la semaine
+                datasets: [{
+                    label: 'Consommation énergétique (kWh)',
+                    data: {{ consumptionPerDay|map(day => day.consumption)|json_encode|raw }}, // Consommation par jour
+                    fill: false,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</div>
 {% endblock %}

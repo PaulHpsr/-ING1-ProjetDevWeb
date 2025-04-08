@@ -3,6 +3,65 @@
 {% block title %}Résultats de la recherche{% endblock %}
 
 {% block body %}
+<style>
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%; /* Image circulaire */
+        margin-bottom: 10px;
+    }
+
+    .search-results {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 20px;
+        justify-content: center;
+    }
+
+    .result-card {
+        width: 250px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .result-card a {
+        color: inherit;
+        text-decoration: none;
+        display: block;
+        height: 100%;
+    }
+
+    .result-info h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .result-info p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .result-card:hover {
+        background-color: #eef3ff;
+        transform: translateY(-5px);
+        cursor: pointer;
+    }
+
+    .text-muted {
+        font-style: italic;
+        color: #aaa;
+        text-align: center;
+    }
+</style>
+
 <div class="container mt-5">
     <h1 class="text-center mb-4">Résultats de la recherche</h1>
 
@@ -12,7 +71,12 @@
         {% for user in users %}
             <div class="result-card">
                 <a href="{{ path('app_user_profile', {'id': user.id}) }}">
-                    <img src="{{ asset(user.profilePicture ? 'uploads/profile_pictures/' ~ user.profilePicture : 'images/default-profile.png') }}" alt="Photo de profil" class="result-image">
+                    {% if user.profilePicture %}
+                        <img src="{{ asset('uploads/profiles/' ~ user.profilePicture) }}" alt="Photo de profil" class="profile-picture">
+                    {% else %}
+                        <img src="{{ asset('images/default-profile.png') }}" alt="Photo de profil par défaut" class="profile-picture">
+                    {% endif %}
+
                     <div class="result-info">
                         <h3>{{ user.username }}</h3>
                         <p>{{ user.firstName }} {{ user.lastName }}</p>
@@ -30,7 +94,7 @@
     <div class="search-results">
         {% for objet in objets %}
             <div class="result-card">
-                <a href="{{ path('app_objet_detail', {'id': objet.id}) }}">
+                <a href="{{ path('objets_connectes_show', {'id': objet.id}) }}">
                     <div class="result-info">
                         <h3>{{ objet.nom }}</h3>
                         <p>Consommation : {{ objet.consommationEnergetique }} kWh</p>
@@ -48,7 +112,7 @@
     <div class="search-results">
         {% for info in infos %}
             <div class="result-card">
-                
+                <a href="#">
                     <div class="result-info">
                         <h3>{{ info.title }}</h3>
                         <p>{{ info.content|slice(0, 100) }}...</p>

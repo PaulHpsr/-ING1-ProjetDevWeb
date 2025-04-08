@@ -6,7 +6,7 @@ namespace App\Controller;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Entity\User;
-use App\Entity\ObjetConnecte;
+use App\Entity\ObjetsConnectes;
 use App\Entity\Signalement;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +22,11 @@ class StatistiquesController extends AbstractController
     {
         // Récupérer des données pour les rapports
         $totalUsers = $entityManager->getRepository(User::class)->count([]);
-        $totalObjets = $entityManager->getRepository(ObjetConnecte::class)->count([]);
+        $totalObjets = $entityManager->getRepository(ObjetsConnectes::class)->count([]);
         $totalSignalements = $entityManager->getRepository(Signalement::class)->count([]);
 
         // Consommation énergétique totale
-        $totalConsommationEnerg = $entityManager->getRepository(ObjetConnecte::class)
+        $totalConsommationEnerg = $entityManager->getRepository(ObjetsConnectes::class)
             ->createQueryBuilder('o')
             ->select('SUM(o.consommationEnergetique)')
             ->getQuery()

@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255)]
     private ?string $memberType = null;  // Type de membre (développeur, testeur, etc.)
 
-    #[ORM\Column(type: "string", nullable: true)]
+    #[ORM\Column(type: "string", nullable: true, options: ["default" => "public/icones/black/profil.png"])]
     private ?string $profilePicture = null;  // URL de la photo de profil
 
     // Système de points

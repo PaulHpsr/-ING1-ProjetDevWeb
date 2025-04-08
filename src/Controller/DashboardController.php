@@ -1,70 +1,72 @@
 <?php
 
-// src/Controller/DashboardController.php
 namespace App\Controller;
 
-use App\Entity\ObjetConnecte;
+use App\Entity\ObjetsConnectes;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class DashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function index(EntityManagerInterface $entityManager, AuthorizationCheckerInterface $authChecker): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
-        // Vérifier si l'utilisateur a le rôle 'ROLE_COMPLEX' ou 'ROLE_ADMIN'
+        // Vérification des rôles (Accès limité aux utilisateurs avec ROLE_COMPLEX ou ROLE_ADMIN)
         if (!$this->isGranted('ROLE_COMPLEX') && !$this->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException('Accès refusé');
         }
-        
 
-        // Récupérer les objets connectés
-        $objets = $entityManager->getRepository(ObjetConnecte::class)->findAll();
+        // Début de la semaine et début de la journée
+        $startOfWeek = (new \DateTime('monday this week'))->setTime(0, 0, 0);
+        $startOfDay = (new \DateTime('today'))->setTime(0, 0, 0);
 
-        // Consommation énergétique quotidienne et hebdomadaire
-        $dailyConsumption = $this->getDailyConsumption($entityManager);
-        $weeklyConsumption = $this->getWeeklyConsumption($entityManager);
+        // Repository des objets connectés
+        $repository = $entityManager->getRepository(ObjetsConnectes::class);
 
+        // Récupération des données
+        $dailyConsumption = $repository->getDailyConsumption($startOfDay);
+        $weeklyConsumption = $repository->getWeeklyConsumption($startOfWeek);
+        $consumptionPerDay = $this->groupConsumptionPerDay($repository, $startOfWeek);
+
+        // Rendu de la vue
         return $this->render('dashboard.html.twig', [
-            'objets' => $objets,
             'dailyConsumption' => $dailyConsumption,
             'weeklyConsumption' => $weeklyConsumption,
+            'consumptionPerDay' => $consumptionPerDay, // Données pour le graphique hebdomadaire
         ]);
     }
 
-    // Fonction pour obtenir la consommation énergétique quotidienne des objets connectés
-    private function getDailyConsumption(EntityManagerInterface $entityManager)
+    /**
+     * Regroupe la consommation énergétique par jour à l'échelle du serveur PHP.
+     *
+     * @param ObjetsConnectesRepository $repository
+     * @param \DateTimeInterface $startOfWeek
+     * @return array
+     */
+    private function groupConsumptionPerDay($repository, \DateTimeInterface $startOfWeek): array
     {
-        $today = new \DateTime('today');
-        $startOfDay = $today->setTime(0, 0, 0);
-
-        $consumption = $entityManager->getRepository(ObjetConnecte::class)->createQueryBuilder('o')
-            ->select('SUM(o.consommationEnergetique)')
-            ->where('o.derniereInteraction > :startOfDay')
-            ->setParameter('startOfDay', $startOfDay)
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        return $consumption ?: 0;
-    }
-
-    // Fonction pour obtenir la consommation énergétique hebdomadaire des objets connectés
-    private function getWeeklyConsumption(EntityManagerInterface $entityManager)
-    {
-        $today = new \DateTime('today');
-        $startOfWeek = $today->modify('monday this week')->setTime(0, 0, 0);
-
-        $consumption = $entityManager->getRepository(ObjetConnecte::class)->createQueryBuilder('o')
-            ->select('SUM(o.consommationEnergetique)')
-            ->where('o.derniereInteraction > :startOfWeek')
+        // Récupérer les données des objets connectés depuis la base
+        $results = $repository->createQueryBuilder('o')
+            ->select('o.derniereInteraction as interactionDate, SUM(o.consommationEnergetique) as consumption')
+            ->where('o.derniereInteraction >= :startOfWeek')
             ->setParameter('startOfWeek', $startOfWeek)
+            ->groupBy('o.derniereInteraction') // Regroupe les dates complètes
+            ->orderBy('o.derniereInteraction', 'ASC')
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getResult();
 
-        return $consumption ?: 0;
+        // Grouper par jour à l'échelle du serveur
+        $groupedResults = [];
+        foreach ($results as $result) {
+            $day = $result['interactionDate']->format('Y-m-d'); // Transforme en jour seulement
+            if (!isset($groupedResults[$day])) {
+                $groupedResults[$day] = 0;
+            }
+            $groupedResults[$day] += $result['consumption']; // Additionne les consommations par jour
+        }
+
+        return $groupedResults;
     }
 }

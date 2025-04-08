@@ -29,7 +29,10 @@ class ObjetsConnecteController extends AbstractController
     public function showObject(ObjetsConnectes $objet): Response
     {
         // L'utilisateur doit avoir un rôle 'ROLE_ADMIN' ou 'ROLE_COMPLEX' pour consulter l'objet
-        $this->denyAccessUnlessGranted(['ROLE_ADMIN', 'ROLE_COMPLEX']);
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_COMPLEX')) {
+            throw $this->createAccessDeniedException();
+        }
+        
 
         return $this->render('objets_connectes/show.html.twig', [
             'objet' => $objet,
@@ -40,7 +43,10 @@ class ObjetsConnecteController extends AbstractController
     #[Route('/objets/ajouter', name: 'objets_connectes_add')]
     public function addObject(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted(['ROLE_ADMIN', 'ROLE_COMPLEX']); 
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_COMPLEX')) {
+            throw $this->createAccessDeniedException();
+        }
+         
 
         $objet = new ObjetsConnectes();
         $form = $this->createForm(ObjetsConnectesType::class, $objet);
@@ -58,4 +64,31 @@ class ObjetsConnecteController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    // Modifier un objet connecté
+#[Route('/objets/{id}/edit', name: 'objets_connectes_edit', requirements: ['id' => '\d+'])]
+public function editObject(Request $request, ObjetsConnectes $objet, EntityManagerInterface $entityManager): Response
+{
+    if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_COMPLEX')) {
+        throw $this->createAccessDeniedException();
+    }
+
+    $form = $this->createForm(ObjetsConnectesType::class, $objet);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+
+        $this->addFlash('success', 'L\'objet connecté a été modifié avec succès!');
+        return $this->redirectToRoute('objets_connectes_show', ['id' => $objet->getId()]);
+    }
+
+    return $this->render('objets_connectes/edit.html.twig', [
+        'form' => $form->createView(),
+        'objet' => $objet,
+    ]);
+}
+
+
+
 }

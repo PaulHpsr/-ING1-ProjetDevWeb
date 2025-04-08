@@ -4,7 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\ObjetConnecte;
+use App\Entity\ObjetsConnectes;
 use App\Entity\Infos;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +41,7 @@ class SearchController extends AbstractController
                 $users = $entityManager->getRepository(User::class)->findByUsernameLike($searchTerm);
                 break;
             case 'objet':
-                $objets = $entityManager->getRepository(ObjetConnecte::class)->findByNameLike($searchTerm);
+                $objets = $entityManager->getRepository(ObjetsConnectes::class)->findByNameOrTypeLike($searchTerm);
                 break;
                 case 'infos':
                     $infos = $entityManager->getRepository(Infos::class)->findByTitleOrContentLike($searchTerm);
@@ -49,8 +49,8 @@ class SearchController extends AbstractController
             default:
                 // Recherche dans les trois entités par défaut
                 $users = $entityManager->getRepository(User::class)->findByUsernameLike($searchTerm);
-                $objets = $entityManager->getRepository(ObjetConnecte::class)->findByNameLike($searchTerm);
-                $infos = $entityManager->getRepository(Infos::class)->findByContentLike($searchTerm);
+                $objets = $entityManager->getRepository(ObjetsConnectes::class)->findByNameOrTypeLike($searchTerm);
+                $infos = $entityManager->getRepository(Infos::class)->findByTitleOrContentLike($searchTerm);
                 break;
         }
 

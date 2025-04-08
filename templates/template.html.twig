@@ -183,8 +183,11 @@
             <a href="{{ path('app_recherche') }}" class="bouton">
                 <img src="{{ asset(app.user.color == 1 ? 'icones/white/026-search.png' : 'icones/black/026-search.png') }}" alt="Icône" class="image">Explorer
             </a>
-
             
+
+            <a href="{{ path('objets_connectes') }}" class="bouton">
+                <img src="{{ asset(app.user.color == 1 ? 'icones/white/026-search.png' : 'icones/black/026-search.png') }}" alt="Icône" class="image">Objets connectés
+            </a>
             <a href="{{ path('app_profile') }}" class="bouton">
                 <img src="{{ asset(app.user.color == 1 ? 'icones/white/profil.png' : 'icones/black/profil.png') }}" alt="Icône" class="image">Profil
             </a>

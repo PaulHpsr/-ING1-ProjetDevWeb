@@ -1,14 +1,67 @@
-{# templates/user/profile.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Profil de {{ user.username }}{% endblock %}
 
 {% block body %}
-<h1>Profil de {{ user.username }}</h1>
-<p><strong>Nom :</strong> {{ user.firstName }} {{ user.lastName }}</p>
-<p><strong>Email :</strong> {{ user.email }}</p>
-<p><strong>Niveau :</strong> {{ user.experienceLevel }}</p>
-<p><strong>Points :</strong> {{ user.points }}</p>
-<a href="{{ path('app_report_user', {'id': user.id}) }}">Signaler cet utilisateur</a>
+<style>
+    .profile-picture {
+        width: 100px; /* largeur réduite */
+        height: 100px; /* hauteur réduite */
+        object-fit: cover; /* permet de garder les proportions */
+        border-radius: 50%; /* pour rendre l'image circulaire */
+        margin-bottom: 15px;
+    }
+
+    .profile-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .profile-details {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    .btn-report-form {
+    display: inline-block;
+}
+
+.btn-report {
+    padding: 10px 15px;
+    background-color: #d9534f;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-report:hover {
+    background-color: #c9302c;
+}
+
+</style>
+
+<div class="profile-container">
+    <h1>Profil de {{ user.username }}</h1>
+
+    {% if user.profilePicture %}
+        <img src="{{ asset('uploads/profiles/' ~ user.profilePicture) }}" alt="Photo de profil" class="profile-picture">
+    {% else %}
+        <img src="{{ asset('images/default-profile.png') }}" alt="Photo de profil par défaut" class="profile-picture">
+    {% endif %}
+
+    <div class="profile-details">
+        <p><strong>Nom :</strong> {{ user.firstName }} {{ user.lastName }}</p>
+        <p><strong>Email :</strong> {{ user.email }}</p>
+        <p><strong>Niveau :</strong> {{ user.experienceLevel }}</p>
+        <p><strong>Points :</strong> {{ user.points }}</p>
+    </div>
+
+    <form method="POST" action="{{ path('app_report_user', {'id': user.id}) }}" class="btn-report-form">
+    <input type="hidden" name="reason" value="Comportement inapproprié">
+    <button type="submit" class="btn-report">Signaler cet utilisateur</button>
+</form>
+
+</div>
 {% endblock %}
