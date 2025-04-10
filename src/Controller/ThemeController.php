@@ -1,49 +1,33 @@
 <?php
 
 // src/Controller/ThemeController.php
+
 namespace App\Controller;
 
-use App\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ThemeController extends AbstractController
 {
     #[Route('/update-theme', name: 'update_theme', methods: ['POST'])]
-    public function updateTheme(Request $request, EntityManagerInterface $entityManager, UserInterface $user): JsonResponse
+    public function updateTheme(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        // Décoder le contenu JSON de la requête
+        // Récupérer le contenu JSON
         $data = json_decode($request->getContent(), true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Invalid JSON input'], 400);
+        $newColor = isset($data['color']) ? (int) $data['color'] : 0;
+
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['success' => false, 'message' => 'Utilisateur non connecté.'], 403);
         }
 
-        // Vérifier que le paramètre 'color' est présent
-        if (!isset($data['color'])) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Missing color parameter'], 400);
-        }
-
-        $color = $data['color'];
-
-        // Exemple de validation : le code couleur doit respecter le format hexadécimal (ex : "#AABBCC")
-        if (!is_string($color) || !preg_match('/^#[a-fA-F0-9]{6}$/', $color)) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Invalid color format. Expecting a hex code like "#AABBCC".'], 400);
-        }
-
-        // Mettre à jour le thème de l'utilisateur
-        // On suppose que votre entité User (implémentant UserInterface) possède une méthode setColor()
-        /** @var User $userEntity */
-        $userEntity = $user;
-        $userEntity->setColor($color);
-
-        // Enregistrer les modifications en base de données
+        // Mettre à jour la propriété "color" de l'utilisateur
+        $user->setColor($newColor);
         $entityManager->flush();
 
-        // Retourner une réponse JSON indiquant le succès de l'opération
-        return new JsonResponse(['status' => 'success']);
+        return new JsonResponse(['success' => true, 'newColor' => $newColor]);
     }
 }

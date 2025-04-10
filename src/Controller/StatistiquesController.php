@@ -53,75 +53,113 @@ class StatistiquesController extends AbstractController
         return ($totalUsers > 0) ? (count($connectedUsers) / $totalUsers) * 100 : 0;
     }
 
-    // Route pour exporter les rapports en CSV
-    #[Route('/admin/statistiques/export-csv', name: 'admin_export_csv')]
-    public function exportCSV(EntityManagerInterface $entityManager): Response
-    {
-        // Générer les données à exporter
-        $users = $entityManager->getRepository(User::class)->findAll();
+// Exporter les rapports en CSV
+#[Route('/admin/statistiques/export-csv', name: 'admin_export_csv')]
+public function exportCSV(EntityManagerInterface $entityManager): Response
+{
+    // Récupérer les utilisateurs et les statistiques
+    $users = $entityManager->getRepository(User::class)->findAll();
+    $totalUsers = $entityManager->getRepository(User::class)->count([]);
+    $totalObjets = $entityManager->getRepository(ObjetsConnectes::class)->count([]);
+    $totalSignalements = $entityManager->getRepository(Signalement::class)->count([]);
+    $totalConsommationEnerg = $entityManager->getRepository(ObjetsConnectes::class)
+        ->createQueryBuilder('o')
+        ->select('SUM(o.consommationEnergetique)')
+        ->getQuery()
+        ->getSingleScalarResult();
+    $tauxConnexion = $this->getTauxConnexion($entityManager);
 
-        // Générer le fichier CSV
-        $csvContent = "ID,Pseudo,Email,Points,Niveau\n";
-        foreach ($users as $user) {
-            $csvContent .= sprintf(
-                "%d,%s,%s,%d,%s\n",
-                $user->getId(),
-                $user->getUsername(),
-                $user->getEmail(),
-                $user->getPoints(),
-                $user->getExperienceLevel()
-            );
-        }
+    // Générer les statistiques dans le fichier CSV
+    $csvContent = "Statistique, Valeur\n";
+    $csvContent .= sprintf(
+        "Total utilisateurs,%d\nTotal objets,%d\nTotal signalements,%d\nTotal consommation énergétique,%.2f\nTaux de connexion,%s\n\n",
+        $totalUsers,
+        $totalObjets,
+        $totalSignalements,
+        $totalConsommationEnerg,
+        $tauxConnexion
+    );
 
-        // Préparer la réponse avec le fichier CSV
-        $response = new Response($csvContent);
-        $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="rapport_utilisateurs.csv"');
-
-        return $response;
+    // Ajouter les informations des utilisateurs
+    $csvContent .= "ID,Pseudo,Email,Points,Niveau\n";
+    foreach ($users as $user) {
+        $csvContent .= sprintf(
+            "%d,%s,%s,%d,%s\n",
+            $user->getId(),
+            $user->getUsername(),
+            $user->getEmail(),
+            $user->getPoints(),
+            $user->getExperienceLevel()
+        );
     }
 
-    // Route pour exporter les rapports en PDF
-    #[Route('/admin/statistiques/export-pdf', name: 'admin_export_pdf')]
-    public function exportPDF(EntityManagerInterface $entityManager): Response
-    {
-        // Instancier Dompdf
-        $dompdf = new Dompdf();
+    // Préparer la réponse
+    $response = new Response($csvContent);
+    $response->headers->set('Content-Type', 'text/csv');
+    $response->headers->set('Content-Disposition', 'attachment; filename="rapport_utilisateurs.csv"');
 
-        // Récupérer les données des utilisateurs
-        $users = $entityManager->getRepository(User::class)->findAll();
+    return $response;
+}
 
-        // Construire le contenu HTML pour le PDF
-        $html = '<h1>Rapport des utilisateurs</h1>';
-        foreach ($users as $user) {
-            $html .= sprintf(
-                "<p>ID: %d - Pseudo: %s - Email: %s - Points: %d - Niveau: %s</p>",
-                $user->getId(),
-                $user->getUsername(),
-                $user->getEmail(),
-                $user->getPoints(),
-                $user->getExperienceLevel()
-            );
-        }
+// Exporter les rapports en PDF
+#[Route('/admin/statistiques/export-pdf', name: 'admin_export_pdf')]
+public function exportPDF(EntityManagerInterface $entityManager): Response
+{
+    // Instancier Dompdf
+    $dompdf = new Dompdf();
 
-        // Charger le contenu HTML dans Dompdf
-        $dompdf->loadHtml($html);
+    // Récupérer les utilisateurs et les statistiques
+    $users = $entityManager->getRepository(User::class)->findAll();
+    $totalUsers = $entityManager->getRepository(User::class)->count([]);
+    $totalObjets = $entityManager->getRepository(ObjetsConnectes::class)->count([]);
+    $totalSignalements = $entityManager->getRepository(Signalement::class)->count([]);
+    $totalConsommationEnerg = $entityManager->getRepository(ObjetsConnectes::class)
+        ->createQueryBuilder('o')
+        ->select('SUM(o.consommationEnergetique)')
+        ->getQuery()
+        ->getSingleScalarResult();
+    $tauxConnexion = $this->getTauxConnexion($entityManager);
 
-        // Configurer les options de Dompdf
-        $options = new Options([
-            'isHtml5ParserEnabled' => true,
-            'isPhpEnabled'         => true,
-        ]);
-        $dompdf->setOptions($options);
+    // Construire le contenu HTML pour le PDF
+    $html = '<h1>Rapport des utilisateurs</h1>';
+    $html .= '<h2>Statistiques</h2>';
+    $html .= sprintf(
+        "<p>Total utilisateurs : %d</p>
+        <p>Total objets : %d</p>
+        <p>Total signalements : %d</p>
+        <p>Total consommation énergétique : %.2f kWh</p>
+        <p>Taux de connexion : %s</p>",
+        $totalUsers,
+        $totalObjets,
+        $totalSignalements,
+        $totalConsommationEnerg,
+        $tauxConnexion
+    );
 
-        // Rendre le PDF
-        $dompdf->render();
-
-        // Générer la réponse PDF
-        $response = new Response($dompdf->output());
-        $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', 'attachment; filename="rapport_utilisateurs.pdf"');
-
-        return $response;
+    $html .= '<h2>Informations des utilisateurs</h2>';
+    foreach ($users as $user) {
+        $html .= sprintf(
+            "<p>ID: %d - Pseudo: %s - Email: %s - Points: %d - Niveau: %s</p>",
+            $user->getId(),
+            $user->getUsername(),
+            $user->getEmail(),
+            $user->getPoints(),
+            $user->getExperienceLevel()
+        );
     }
+
+    // Charger le contenu HTML dans Dompdf
+    $dompdf->loadHtml($html);
+
+    // Configurer les options de Dompdf
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+
+    // Préparer la réponse
+    $response = new Response($dompdf->output());
+    $response->headers->set('Content-Type', 'application/pdf');
+    $response->headers->set('Content-Disposition', 'attachment; filename="rapport_utilisateurs.pdf"');
+
+    return $response;
+}
 }

@@ -1,4 +1,3 @@
-{# templates/objets_connectes/add.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Ajouter un objet connecté{% endblock %}
@@ -12,6 +11,68 @@
         {{ form_row(form.marque) }}
         {{ form_row(form.etat) }}
         {{ form_row(form.consommationEnergetique) }}
-        <!-- Ajoutez d'autres champs pour les objets ici -->
+
+        <!-- Conteneurs pour les champs dynamiques, masqués par défaut -->
+        <div id="fields-thermostat" style="display: none;">
+            {{ form_row(form.temperatureActuelle) }}
+            {{ form_row(form.temperatureCible) }}
+        </div>
+        <div id="fields-porte" style="display: none;">
+            {{ form_row(form.etatPorte) }}
+            {{ form_row(form.etatBatterie) }}
+        </div>
+        <div id="fields-camera" style="display: none;">
+            {{ form_row(form.resolutionCamera) }}
+            {{ form_row(form.angleVision) }}
+        </div>
+        <div id="fields-photocopieuse" style="display: none;">
+            {{ form_row(form.niveauStockMAX) }}
+            {{ form_row(form.niveauStock) }}
+            {{ form_row(form.nombreCopiesParJour) }}
+        </div>
+
+        {{ form_row(form.save) }}
     {{ form_end(form) }}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Sélectionner le champ "type"
+            const typeField = document.getElementById('objets_connectes_type');
+            // Conteneurs pour chaque type
+            const thermostatFields = document.getElementById('fields-thermostat');
+            const porteFields = document.getElementById('fields-porte');
+            const cameraFields = document.getElementById('fields-camera');
+            const photocopieuseFields = document.getElementById('fields-photocopieuse');
+
+            function hideAllDynamicFields() {
+                thermostatFields.style.display = 'none';
+                porteFields.style.display = 'none';
+                cameraFields.style.display = 'none';
+                photocopieuseFields.style.display = 'none';
+            }
+
+            function showFieldsForType(selectedType) {
+                hideAllDynamicFields();
+                if (selectedType.toLowerCase() === 'thermostat') {
+                    thermostatFields.style.display = 'block';
+                } else if (selectedType.toLowerCase() === 'porte') {
+                    porteFields.style.display = 'block';
+                } else if (selectedType.toLowerCase() === 'caméra' || selectedType.toLowerCase() === 'camera') {
+                    cameraFields.style.display = 'block';
+                } else if (selectedType.toLowerCase() === 'photocopieuse') {
+                    photocopieuseFields.style.display = 'block';
+                }
+            }
+
+            // Ajout de l'écouteur d'événement sur le champ "type"
+            typeField.addEventListener('change', function (event) {
+                showFieldsForType(event.target.value);
+            });
+
+            // Au chargement, si une valeur est déjà présente, affichez les champs correspondants.
+            if (typeField.value) {
+                showFieldsForType(typeField.value);
+            }
+        });
+    </script>
 {% endblock %}

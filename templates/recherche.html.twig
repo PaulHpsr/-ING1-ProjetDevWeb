@@ -38,7 +38,6 @@
         left: 30vw;
         width: 30vw;
         padding: 0.5vh 1vw 0.5vh;
-        
         border-radius: 1vh;
         border-style: hidden;
         outline: transparent;
@@ -52,7 +51,6 @@
         left: 35vw;
         width: 10vw;
         padding: 0.5vh 1vw 0.5vh;
-       
         border-radius: 1vh;
         border-style: hidden;
         outline: transparent;
@@ -66,12 +64,10 @@
         right: 38.2vw;
         width: 4vh;
         height: 4vh;
-        
         border-radius: 5vh;
         border-style: hidden;
         color: black;
         background-color: rgba(255, 255, 255, 0.413);
-        
         cursor: pointer;
         font-size: 0;
     }
@@ -91,51 +87,37 @@
         opacity: 0.8;
     }
 
-    /* Style pour les thèmes */
-    body.theme-light {
-        background-color: white;
-        color: black;
+    /* Styles pour les thèmes avec transition */
+    body {
+        transition: background-color 0.5s ease, color 0.5s ease;
     }
-
-    body.theme-dark {
-        background-color: #121212;
-        color: white;
+    .theme-dark {
+        background-color: #222;
+        color: #f5f5f5;
+    }
+    .theme-light {
+        background-color: #fff;
+        color: #333;
     }
 </style>
 
 <header>
     <form action="{{ path('app_recherche') }}" method="get">
-    <input type="text" id="search-box" name="recherche" placeholder="Chercher">
-    <select id="filter-box" name="filter">
-        <option value="none">Sans filtre</option>
-        <option value="user">Utilisateur</option>
-        <option value="objet">Objet connecté</option>
-        <option value="infos">Infos</option>
-    </select>
-</form>
+        <input type="text" id="search-box" name="recherche" placeholder="Chercher">
+        <select id="filter-box" name="filter">
+            <option value="none">Sans filtre</option>
+            <option value="user">Utilisateur</option>
+            <option value="objet">Objet connecté</option>
+            <option value="infos">Infos</option>
+        </select>
+    </form>
 
-
-    <!-- Bouton de changement de thème -->
+    <!-- Bouton de changement de thème (uniquement une instance) -->
     <div style="position: absolute; top: 2vh; right: 2vw;">
-        <button id="theme-toggle" onclick="toggleTheme()">
-            <img src="{{ asset(app.user.color == 1 ? 'icones/white/moon.png' : 'icones/black/sun.png') }}" alt="Changer de thème" style="width: 2vh; height: 2vh;">
+        <button id="theme-toggle" type="button" onclick="toggleTheme()">
+            <img id="theme-icon" src="{{ asset(app.user.color == 1 ? 'icones/white/moon.png' : 'icones/black/sun.png') }}" alt="Changer de thème" style="width: 2vh; height: 2vh;">
         </button>
     </div>
 </header>
-
-<script>
-    // Fonction JavaScript pour changer le thème
-    function toggleTheme() {
-    let currentTheme = document.body.classList.contains('theme-dark') ? 'theme-light' : 'theme-dark';
-    document.body.classList.remove('theme-light', 'theme-dark');
-    document.body.classList.add(currentTheme);
-
-    // Envoi de la requête Ajax pour mettre à jour le thème dans la base de données
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', '/update-theme', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify({ color: currentTheme === 'theme-dark' ? 1 : 0 }));
-}
-</script>
 
 {% endblock %}

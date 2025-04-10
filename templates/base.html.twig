@@ -2,15 +2,97 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
-
-        {% block javascripts %}
-        {% endblock %}
+        <title>{% block title %}Mon site{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        {% block stylesheets %}{% endblock %}
     </head>
-    <body>
+    <body class="{{ app.user is not null and app.user.color == 0 ? 'theme-dark' : 'theme-light' }}">
         {% block body %}{% endblock %}
+        {% block javascripts %}
+        <script>
+            // On définit l'objet contenant les URLs pour chaque icône selon le thème
+            const sidebarIcons = {
+                logo: {
+                    dark: "{{ asset('icones/white/cacaboudin.png') }}",
+                    light: "{{ asset('icones/black/cacaboudin.png') }}"
+                },
+                home: {
+                    dark: "{{ asset('icones/white/home.png') }}",
+                    light: "{{ asset('icones/black/home.png') }}"
+                },
+                recherche: {
+                    dark: "{{ asset('icones/white/026-search.png') }}",
+                    light: "{{ asset('icones/black/026-search.png') }}"
+                },
+                objets: {
+                    dark: "{{ asset('icones/white/026-search.png') }}",
+                    light: "{{ asset('icones/black/026-search.png') }}"
+                },
+                profil: {
+                    dark: "{{ asset('icones/white/profil.png') }}",
+                    light: "{{ asset('icones/black/profil.png') }}"
+                },
+                exit: {
+                    dark: "{{ asset('icones/white/exit.png') }}",
+                    light: "{{ asset('icones/black/exit.png') }}"
+                },
+                admin_users: {
+                    dark: "{{ asset('icones/white/008-message.png') }}",
+                    light: "{{ asset('icones/black/008-message.png') }}"
+                },
+                admin_signalements: {
+                    dark: "{{ asset('icones/white/043-warning.png') }}",
+                    light: "{{ asset('icones/black/043-warning.png') }}"
+                },
+                admin_profil: {
+                    dark: "{{ asset('icones/white/profil.png') }}",
+                    light: "{{ asset('icones/black/profil.png') }}"
+                }
+            };
+
+            // Fonction JavaScript pour basculer le thème de manière smooth
+            function toggleTheme() {
+                // Détermine le thème actuel basé sur la classe du body
+                let isCurrentlyDark = document.body.classList.contains('theme-dark');
+                let newTheme = isCurrentlyDark ? 'theme-light' : 'theme-dark';
+
+                // Met à jour la classe sur le body
+                document.body.classList.remove('theme-light', 'theme-dark');
+                document.body.classList.add(newTheme);
+
+                // Mise à jour de l'icône du bouton de changement de thème (si présent)
+                const themeIcon = document.getElementById('theme-icon');
+                if (themeIcon) {
+                    themeIcon.src = newTheme === 'theme-dark'
+                        ? "{{ asset('icones/white/moon.png') }}"
+                        : "{{ asset('icones/black/sun.png') }}";
+                }
+
+                // Mise à jour des icônes de la sidebar en fonction du nouveau thème
+                document.getElementById('logo-icon').src = sidebarIcons.logo[newTheme === 'theme-dark' ? 'dark' : 'light'];
+                document.getElementById('icon-home').src = sidebarIcons.home[newTheme === 'theme-dark' ? 'dark' : 'light'];
+                document.getElementById('icon-recherche').src = sidebarIcons.recherche[newTheme === 'theme-dark' ? 'dark' : 'light'];
+                document.getElementById('icon-objets').src = sidebarIcons.objets[newTheme === 'theme-dark' ? 'dark' : 'light'];
+                document.getElementById('icon-profil').src = sidebarIcons.profil[newTheme === 'theme-dark' ? 'dark' : 'light'];
+                document.getElementById('icon-exit').src = sidebarIcons.exit[newTheme === 'theme-dark' ? 'dark' : 'light'];
+                {% if is_granted('ROLE_ADMIN') %}
+                document.getElementById('icon-admin-users').src = sidebarIcons.admin_users[newTheme === 'theme-dark' ? 'dark' : 'light'];
+                document.getElementById('icon-admin-signalements').src = sidebarIcons.admin_signalements[newTheme === 'theme-dark' ? 'dark' : 'light'];
+                document.getElementById('icon-admin-profil').src = sidebarIcons.admin_profil[newTheme === 'theme-dark' ? 'dark' : 'light'];
+                {% endif %}
+
+                // Envoi de la requête AJAX pour mettre à jour la préférence sur le serveur
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', '/update-theme', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                        console.log('Le thème a bien été mis à jour côté serveur.');
+                    }
+                };
+                xhr.send(JSON.stringify({ color: newTheme === 'theme-dark' ? 1 : 0 }));
+            }
+        </script>
+        {% endblock %}
     </body>
 </html>
