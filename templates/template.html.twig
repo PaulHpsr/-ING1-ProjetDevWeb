@@ -21,7 +21,7 @@
                 Explorer
             </a>
             <a href="{{ path('objets_connectes') }}" class="bouton">
-                <img id="icon-objets" src="{{ asset(app.user.color == 0 ? 'icones/white/026-search.png' : 'icones/black/026-search.png') }}" alt="Icône" class="image">
+                <img id="icon-objets" src="{{ asset(app.user.color == 0 ? 'icones/white/objets.png' : 'icones/black/objets.png') }}" alt="Icône" class="image">
                 Objets connectés
             </a>
             <a href="{{ path('app_profile') }}" class="bouton">
@@ -51,11 +51,11 @@
                     Valider les inscriptions
                 </a>
                 <a href="{{ path('app_infos_new') }}" class="bouton bouton-admin">
-                    <img id="icon-admin-profil" src="{{ asset(app.user.color == 0 ? 'icones/white/profil.png' : 'icones/black/profil.png') }}" alt="Icône" class="image">
+        
                     Ajouter Infos
                 </a>
                 <a href="{{ path('admin_statistiques') }}" class="bouton bouton-admin">
-                    <img id="icon-admin-stats" src="{{ asset(app.user.color == 0 ? 'icones/white/stats.png' : 'icones/black/stats.png') }}" alt="Icône" class="image">
+                    
                     Statistiques
                 </a>
             {% endif %}
