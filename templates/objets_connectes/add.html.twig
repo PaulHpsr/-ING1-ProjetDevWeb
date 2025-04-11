@@ -3,42 +3,75 @@
 {% block title %}Ajouter un objet connecté{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un objet connecté</h1>
+    {% include 'recherche.html.twig' %}
+    {% include 'template.html.twig' %}
+<body class="add-object-page">
+        <h1 class="text-center">Ajouter un objet connecté</h1>
 
-    {{ form_start(form) }}
-        {{ form_row(form.nom) }}
-        {{ form_row(form.type) }}
-        {{ form_row(form.marque) }}
-        {{ form_row(form.etat) }}
-        {{ form_row(form.consommationEnergetique) }}
+        {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_row(form.nom) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.type) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.marque) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.etat) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.consommationEnergetique) }}
+            </div>
 
-        <!-- Conteneurs pour les champs dynamiques, masqués par défaut -->
-        <div id="fields-thermostat" style="display: none;">
-            {{ form_row(form.temperatureActuelle) }}
-            {{ form_row(form.temperatureCible) }}
-        </div>
-        <div id="fields-porte" style="display: none;">
-            {{ form_row(form.etatPorte) }}
-            {{ form_row(form.etatBatterie) }}
-        </div>
-        <div id="fields-camera" style="display: none;">
-            {{ form_row(form.resolutionCamera) }}
-            {{ form_row(form.angleVision) }}
-        </div>
-        <div id="fields-photocopieuse" style="display: none;">
-            {{ form_row(form.niveauStockMAX) }}
-            {{ form_row(form.niveauStock) }}
-            {{ form_row(form.nombreCopiesParJour) }}
-        </div>
+            <!-- Conteneurs pour les champs dynamiques (masqués par défaut) -->
+            <div id="fields-thermostat" class="dynamic-fields" style="display: none;">
+                <div class="form-group">
+                    {{ form_row(form.temperatureActuelle) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.temperatureCible) }}
+                </div>
+            </div>
+            <div id="fields-porte" class="dynamic-fields" style="display: none;">
+                <div class="form-group">
+                    {{ form_row(form.etatPorte) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.etatBatterie) }}
+                </div>
+            </div>
+            <div id="fields-camera" class="dynamic-fields" style="display: none;">
+                <div class="form-group">
+                    {{ form_row(form.resolutionCamera) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.angleVision) }}
+                </div>
+            </div>
+            <div id="fields-photocopieuse" class="dynamic-fields" style="display: none;">
+                <div class="form-group">
+                    {{ form_row(form.niveauStockMAX) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.niveauStock) }}
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.nombreCopiesParJour) }}
+                </div>
+            </div>
 
-        {{ form_row(form.save) }}
-    {{ form_end(form) }}
+            <div class="form-group">
+                {{ form_row(form.save) }}
+            </div>
+        {{ form_end(form) }}
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Sélectionner le champ "type"
+            // Sélection du champ "type"
             const typeField = document.getElementById('objets_connectes_type');
-            // Conteneurs pour chaque type
+            // Conteneurs dynamiques
             const thermostatFields = document.getElementById('fields-thermostat');
             const porteFields = document.getElementById('fields-porte');
             const cameraFields = document.getElementById('fields-camera');
@@ -53,26 +86,28 @@
 
             function showFieldsForType(selectedType) {
                 hideAllDynamicFields();
-                if (selectedType.toLowerCase() === 'thermostat') {
+                const type = selectedType.toLowerCase();
+                if (type === 'thermostat') {
                     thermostatFields.style.display = 'block';
-                } else if (selectedType.toLowerCase() === 'porte') {
+                } else if (type === 'porte') {
                     porteFields.style.display = 'block';
-                } else if (selectedType.toLowerCase() === 'caméra' || selectedType.toLowerCase() === 'camera') {
+                } else if (type === 'caméra' || type === 'camera') {
                     cameraFields.style.display = 'block';
-                } else if (selectedType.toLowerCase() === 'photocopieuse') {
+                } else if (type === 'photocopieuse') {
                     photocopieuseFields.style.display = 'block';
                 }
             }
 
-            // Ajout de l'écouteur d'événement sur le champ "type"
+            // Lors du changement de valeur dans le champ "type"
             typeField.addEventListener('change', function (event) {
                 showFieldsForType(event.target.value);
             });
 
-            // Au chargement, si une valeur est déjà présente, affichez les champs correspondants.
+            // Au chargement, si une valeur existe, affiche les champs correspondants
             if (typeField.value) {
                 showFieldsForType(typeField.value);
             }
         });
     </script>
+</body>
 {% endblock %}

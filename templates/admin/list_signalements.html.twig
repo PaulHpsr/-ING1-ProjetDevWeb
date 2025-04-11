@@ -3,69 +3,41 @@
 {% block title %}Liste des signalements{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="text-center">Liste des signalements</h1>
+    {% include 'recherche.html.twig' %}
+    {% include 'template.html.twig' %}
+<body class="signalements-page">
+        <h1 class="text-center">Liste des signalements</h1>
 
-    <!-- Affichage des signalements -->
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Raison</th>
-                <th>Utilisateur signalé</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for signalement in signalements %}
-            <tr>
-                <td>{{ signalement.id }}</td>
-                <td>{{ signalement.reason }}</td>
-                <td>{{ signalement.reportedUser.username }}</td>
-                <td>
-                    <a href="{{ path('admin_supprimer_signalement', {'id': signalement.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce signalement ?');">
-                        Supprimer
-                    </a>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="4" class="text-center">Aucun signalement trouvé.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endblock %}
-
-{% block stylesheets %}
-<style>
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .table th, .table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-
-    .table th {
-        background-color: #f2f2f2;
-    }
-
-    .btn {
-        padding: 6px 12px;
-        background-color: #d9534f;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        text-decoration: none;
-    }
-
-    .btn:hover {
-        background-color: #c9302c;
-    }
-</style>
+        <!-- Affichage des signalements -->
+        <div class="signalements-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Raison</th>
+                        <th>Utilisateur signalé</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for signalement in signalements %}
+                    <tr>
+                        <td>{{ signalement.id }}</td>
+                        <td>{{ signalement.reason }}</td>
+                        <td>{{ signalement.reportedUser.username }}</td>
+                        <td>
+                            <a href="{{ path('admin_supprimer_signalement', {'id': signalement.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce signalement ?');">
+                                Supprimer
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">Aucun signalement trouvé.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+</body>
 {% endblock %}

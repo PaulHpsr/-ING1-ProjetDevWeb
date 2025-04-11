@@ -4,6 +4,8 @@
 {% block title %}{{ objet.nom }} - Détails{% endblock %}
 
 {% block body %}
+    {% include 'recherche.html.twig' %}
+    {% include 'template.html.twig' %}
     <h1>Détails de l'objet connecté : {{ objet.nom }}</h1>
 
     <p>Type : {{ objet.type }}</p>

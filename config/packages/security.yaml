@@ -20,6 +20,7 @@ security:
             custom_authenticators:
                 - App\Security\UserAuthenticator
             provider: app_user_provider
+            entry_point: App\Security\RedirectEntryPoint
             form_login:
                 login_path: app_login
                 check_path: app_login
@@ -38,6 +39,6 @@ security:
     - { path: ^/register, roles: PUBLIC_ACCESS }
     - { path: ^/landing, roles: PUBLIC_ACCESS }
     - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/$, roles: PUBLIC_ACCESS } # Accès public à la page d'accueil
-    - { path: ^/, roles: ROLE_USER } # Routes restantes nécessitent une authentification
+    - { path: ^/.*, roles: ROLE_USER } 
+
 

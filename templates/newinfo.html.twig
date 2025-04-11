@@ -3,7 +3,9 @@
 {% block title %}Créer une Nouvelle Info{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
+
+    {% include 'recherche.html.twig' %}
+    {% include 'template.html.twig' %}
         <h1 class="text-center">Créer une Nouvelle Info</h1>
 
         {% if app.flashes('error') is not empty %}
@@ -14,7 +16,7 @@
             </div>
         {% endif %}
 
-        <div class="card shadow-sm p-4">
+
             {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
                 <div class="form-group mb-3">
                     {{ form_label(form.title, 'Titre', {'label_attr': {'class': 'form-label'}}) }}
@@ -50,6 +52,6 @@
                     <button type="submit" class="btn btn-primary">Créer</button>
                 </div>
             {{ form_end(form) }}
-        </div>
-    </div>
+
+
 {% endblock %}

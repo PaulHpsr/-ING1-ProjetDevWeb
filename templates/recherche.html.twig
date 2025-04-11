@@ -1,123 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recherche | Dater{% endblock %}
+{% block title %}Recherche | CY Entreprise{% endblock %}
 
 {% block body %}
-<style>
-    @font-face {
-        font-family: 'quicksand';
-        src: url('{{ asset('fonts/Quicksand_Light.otf') }}') format('opentype');
-    }
+    {% include 'template.html.twig' %}
+<body class="search-bar-page">
+    <header>
+        <!-- Barre de recherche -->
+        <form action="{{ path('app_recherche') }}" method="get" style="display: flex; align-items: center; flex-grow: 1;">
+            <input type="text" id="search-box" name="recherche" placeholder="Chercher">
+            <select id="filter-box" name="filter">
+                <option value="none">Sans filtre</option>
+                <option value="user">Utilisateur</option>
+                <option value="objet">Objet connecté</option>
+                <option value="infos">Infos</option>
+            </select>
+            <button id="button-box" type="submit">
+                <img src="{{ asset(app.user.color == 1 ? 'icones/black/026-search.png' : 'icones/black/026-search.png') }}" alt="Chercher">
+            </button>
+        </form>
 
-    .main { 
-        position: absolute;
-        top: 20vh;
-        left: 25vw;
-    }
-
-    header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 18%;
-        z-index: 500;
-        padding: 0;
-        color: black;
-        background: rgba(66, 66, 66, 1);
-        box-shadow: 0vh 0 4vh 0.5vh rgba(9, 22, 36, 0.37);
-    }
-
-    button {
-        padding: 0;
-    }
-
-    #search-box {
-        position: absolute;
-        top: 6vh;
-        left: 30vw;
-        width: 30vw;
-        padding: 0.5vh 1vw 0.5vh;
-        border-radius: 1vh;
-        border-style: hidden;
-        outline: transparent;
-        font-family: 'quicksand';
-        font-size: 3vh;
-    }
-
-    #filter-box {
-        position: absolute;
-        top: 1.5vh;
-        left: 35vw;
-        width: 10vw;
-        padding: 0.5vh 1vw 0.5vh;
-        border-radius: 1vh;
-        border-style: hidden;
-        outline: transparent;
-        font-family: 'quicksand';
-        font-size: 2vh;
-    }
-
-    #button-box {
-        position: absolute;
-        top: 6.3vh;
-        right: 38.2vw;
-        width: 4vh;
-        height: 4vh;
-        border-radius: 5vh;
-        border-style: hidden;
-        color: black;
-        background-color: rgba(255, 255, 255, 0.413);
-        cursor: pointer;
-        font-size: 0;
-    }
-
-    #button-box:hover {
-        background-color: #85858500;
-        box-shadow: 0 0 0 0 rgba(180, 180, 180, 0);
-    }
-
-    .icone {
-        position: relative;
-        top: 0vh;
-        left: 0vh;
-        border-style: hidden;
-        width: 3vh;
-        height: 3vh;
-        opacity: 0.8;
-    }
-
-    /* Styles pour les thèmes avec transition */
-    body {
-        transition: background-color 0.5s ease, color 0.5s ease;
-    }
-    .theme-dark {
-        background-color: #222;
-        color: #f5f5f5;
-    }
-    .theme-light {
-        background-color: #fff;
-        color: #333;
-    }
-</style>
-
-<header>
-    <form action="{{ path('app_recherche') }}" method="get">
-        <input type="text" id="search-box" name="recherche" placeholder="Chercher">
-        <select id="filter-box" name="filter">
-            <option value="none">Sans filtre</option>
-            <option value="user">Utilisateur</option>
-            <option value="objet">Objet connecté</option>
-            <option value="infos">Infos</option>
-        </select>
-    </form>
-
-    <!-- Bouton de changement de thème (uniquement une instance) -->
-    <div style="position: absolute; top: 2vh; right: 2vw;">
+        <!-- Bouton de changement de thème -->
         <button id="theme-toggle" type="button" onclick="toggleTheme()">
-            <img id="theme-icon" src="{{ asset(app.user.color == 1 ? 'icones/white/moon.png' : 'icones/black/sun.png') }}" alt="Changer de thème" style="width: 2vh; height: 2vh;">
+            <img id="theme-icon" src="{{ asset(app.user.color == 1 ? 'icones/white/moon.png' : 'icones/black/sun.png') }}" alt="Changer de thème">
         </button>
-    </div>
-</header>
+    </header>
 
+    
+</body>
 {% endblock %}

@@ -3,6 +3,8 @@
 {% block title %}Résultats de la recherche{% endblock %}
 
 {% block body %}
+    {% include 'recherche.html.twig' %}
+    {% include 'template.html.twig' %}
 <style>
     .profile-picture {
         width: 100px;
@@ -62,7 +64,7 @@
     }
 </style>
 
-<div class="container mt-5">
+
     <h1 class="text-center mb-4">Résultats de la recherche</h1>
 
     <!-- Résultats des utilisateurs -->
@@ -122,6 +124,6 @@
         {% else %}
             <p class="text-muted">Aucune info trouvée.</p>
         {% endfor %}
-    </div>
+
 </div>
 {% endblock %}

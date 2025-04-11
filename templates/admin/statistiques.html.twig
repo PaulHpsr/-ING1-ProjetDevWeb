@@ -1,25 +1,32 @@
-{# templates/admin/statistiques.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Statistiques Admin{% endblock %}
 
 {% block body %}
-    <h1>Statistiques de la plateforme</h1>
+    {% include 'recherche.html.twig' %}
+    {% include 'template.html.twig' %}
+<body class="statistiques-page">
 
-    <div>
-        <h2>Rapports Avancés</h2>
-        <p>Total des utilisateurs : {{ totalUsers }}</p>
-        <p>Total des objets connectés : {{ totalObjets }}</p>
-        <p>Total des signalements : {{ totalSignalements }}</p>
-        <p>Consommation énergétique totale : {{ totalConsommationEnerg }} kWh</p>
-        <p>Taux de connexion des utilisateurs : {{ tauxConnexion }}%</p>
-    </div>
+        <h1 class="text-center">Statistiques de la plateforme</h1>
 
-    <div>
-        <h2>Exporter les rapports</h2>
-        <a href="{{ path('admin_export_csv') }}">Exporter en CSV</a> | 
-        <a href="{{ path('admin_export_pdf') }}">Exporter en PDF</a>
-    </div>
+        <!-- Rapports Avancés -->
+        <div class="rapports-container">
+            <h2>Rapports Avancés</h2>
+            <div class="rapport">
+                <p><strong>Total des utilisateurs :</strong> {{ totalUsers }}</p>
+                <p><strong>Total des objets connectés :</strong> {{ totalObjets }}</p>
+                <p><strong>Total des signalements :</strong> {{ totalSignalements }}</p>
+                <p><strong>Consommation énergétique totale :</strong> {{ totalConsommationEnerg }} kWh</p>
+                <p><strong>Taux de connexion des utilisateurs :</strong> {{ tauxConnexion }}%</p>
+            </div>
+        </div>
 
+        <!-- Exportation des rapports -->
+        <div class="export-container">
+            <h2>Exporter les rapports</h2>
+            <a href="{{ path('admin_export_csv') }}" class="btn btn-primary">Exporter en CSV</a>
+            <a href="{{ path('admin_export_pdf') }}" class="btn btn-secondary">Exporter en PDF</a>
+        </div>
+
+</body>
 {% endblock %}

@@ -1,191 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un compte | Dater{% endblock %}
+{% block title %}Créer un compte | CY Entreprise{% endblock %}
 
 {% block body %}
-
-<style>
-    @font-face {
-        font-family: 'against.projet';
-        src: url('{{ asset('fonts/against_regular.otf') }}') format('opentype'); 
-    }
-
-    @font-face {
-        font-family: 'quicksand';
-        src: url('{{ asset('fonts/Quicksand_Light.otf') }}') format('opentype');
-    }
-
-    body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        width: 100vw;
-        background-image: url("./image/bg_ahri2.jpg");
-        background-size: cover;
-        background-position: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
-
-    .overlay{
-                position:absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                z-index: 1;
-            }
-
-    .logo {
-                position: absolute;
-                top: 3vw;
-                left: 0vw;
-                width: 40vw;
-
-                font-family: 'against.projet';
-                color: rgba(255, 255, 255, 1);                 
-                font-size: 7vw;
-                text-decoration: none;
-                text-align: center;
-            }
-
-    .image {
-        position: relative;
-                top: 2vw;
-                left: 0vw;
-                width: 6vw;
-                height: 6vw;
-                margin-right: 1vw;
-    }
-
-    /* Form Container (bottom-left positioning) */
-    .container {
-        position: absolute;
-        bottom: 1vw;
-        left: 35vw;
-        width: 40vw;
-        padding: 2rem;
-        background-color: rgba(0, 0, 0, 0.8);
-        border-radius: 0.5rem;
-        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.7);
-        text-align: left;
-        color: white;
-    }
-
-    /* Title */
-    h1 {
-        font-family: 'against.projet';
-        font-size: 2.5rem;
-        margin-bottom: 1.5rem;
-        text-align: center;
-        color: white;
-    }
-
-    /* Form Styles */
-    label {
-        font-family: 'quicksand';
-        font-size: 1rem;
-        color: white;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-
-    input, select {
-        width: 100%;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        border-radius: 0.5rem;
-        border: 1px solid #ddd;
-        font-size: 1rem;
-    }
-
-    /* Button Styling */
-    .bouton {
-        width: 100%;
-        padding: 1rem;
-        background-color: rgb(160, 250, 119, 0.8);
-        color: white;
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-align: center;
-        border: none;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
-        transition: background-color 0.3s ease;
-    }
-
-    .bouton:hover {
-        background-color: rgb(220, 50, 200, 0.1);
-    }
-
-    /* Flexbox for splitting the form into two parts */
-    .form-group {
-        display: flex;
-        justify-content: space-between;
-        gap: 2rem;
-    }
-
-    .form-group > div {
-        width: 48%;
-    }
-
-    /* Footer */
-    .footer {
-        position: absolute;
-        bottom: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
-        font-family: 'quicksand';
-        font-size: 1rem;
-        color: white;
-        text-align: center;
-    }
-</style>
-
-<div class="overlay">
-    {% for label, messages in app.flashes %}
-     {% for message in messages %}
-         <div class="alert alert-{{ label }}">
-             {{ message }}
-           </div>
-        {% endfor %}
-    {% endfor %}
-        <div>
-            <a href="{{ path('app_landing') }}" class="logo">
-                <img src="{{ asset('icones/cacaboudin.jpg') }}" alt="Icône" class="image"> Dater
-            </a>
-        </div>
-
-    <!-- Form Container -->
-    <div class="container">
-        <h1>Créer un compte</h1>
-
-        {{ form_start(form) }}
-            <div class="form-group">
-                <div>
-                    {{ form_row(form.username) }}
-                    {{ form_row(form.firstName) }}
-                    {{ form_row(form.lastName) }}
-                    {{ form_row(form.email) }}
-                </div>
-                <div>
-                    {{ form_row(form.password) }}
-                    {{ form_row(form.birthdate) }}
-                    {{ form_row(form.sex) }}
-                    {{ form_row(form.memberType) }}
-                </div>
+<body class="register-page">
+    <div class="overlay">
+        {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
             </div>
+        {% endfor %}
+        {% endfor %}
 
-            {{ form_row(form.profilePicture) }}
+        <!-- Logo Section -->
+        <a href="{{ path('app_landing') }}" class="logo">
+            <img src="{{ asset('icones/cacaboudin.jpg') }}" alt="Icône" class="image">CY Entreprise
+        </a>
 
-            <button type="submit" class="bouton">Valider</button>
-        {{ form_end(form) }}
+        <!-- Formulaire de Création de compte -->
+        <div class="container">
+            <h1>Créer un compte</h1>
+
+            {{ form_start(form) }}
+                <div class="form-group">
+                    <div>
+                        {{ form_row(form.username) }}
+                        {{ form_row(form.firstName) }}
+                        {{ form_row(form.lastName) }}
+                        {{ form_row(form.email) }}
+                    </div>
+                    <div>
+                        {{ form_row(form.password) }}
+                        {{ form_row(form.birthdate) }}
+                        {{ form_row(form.sex) }}
+                        {{ form_row(form.memberType) }}
+                    </div>
+                </div>
+                {{ form_row(form.profilePicture) }}
+
+                <button type="submit" class="bouton">Valider</button>
+            {{ form_end(form) }}
+        </div>
     </div>
-</div>
-
+</body>
 {% endblock %}

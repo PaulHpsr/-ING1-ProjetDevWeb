@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Page d'accueil | Dater{% endblock %}
+{% block title %}Page d'accueil | CY Entreprise{% endblock %}
 
 {% block body %}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-    <div class="sommaire">
+    <div class="navigation-bar">
         <div class="logo">
-            <img id="logo-icon" src="{{ asset(app.user.color == 0 ? 'icones/white/cacaboudin.png' : 'icones/black/cacaboudin.png') }}" alt="Icône" class="image">
-            Dater
+            <img id="logo-icon" src="{{ asset(app.user.color == 0 ? 'icones/cacaboudin.jpg' : 'icones/cacaboudin.jpg') }}" alt="Icône" class="image">
+            CY Entreprise
         </div>
 
         <div class="boutons">
@@ -32,21 +32,31 @@
                 <img id="icon-exit" src="{{ asset(app.user.color == 0 ? 'icones/white/exit.png' : 'icones/black/exit.png') }}" alt="Icône" class="image">
                 Déconnexion
             </a>
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COMPLEXE') %}
+                <a href="{{ path('app_dashboard') }}" class="bouton bouton-admin">
+                    <img id="icon-dashboard" src="{{ asset(app.user.color == 0 ? 'icones/white/dashboard.png' : 'icones/black/dashboard.png') }}" alt="Icône" class="image">
+                    Dashboard
+                </a>
+            {% endif %}
             {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('admin_users') }}" class="bouton">
+                <a href="{{ path('admin_users') }}" class="bouton bouton-admin">
                     <img id="icon-admin-users" src="{{ asset(app.user.color == 0 ? 'icones/white/008-message.png' : 'icones/black/008-message.png') }}" alt="Icône" class="image">
                     Gérer les utilisateurs
                 </a>
-                <a href="{{ path('admin_signalements') }}" class="bouton">
+                <a href="{{ path('admin_signalements') }}" class="bouton bouton-admin">
                     <img id="icon-admin-signalements" src="{{ asset(app.user.color == 0 ? 'icones/white/043-warning.png' : 'icones/black/043-warning.png') }}" alt="Icône" class="image">
                     Notifications
                 </a>
-                <li>
-                    <a href="{{ path('admin_verification') }}">Valider les inscriptions</a>
-                </li>
-                <a href="{{ path('app_infos_new') }}" class="bouton">
+                <a href="{{ path('admin_verification') }}" class="bouton bouton-admin">
+                    Valider les inscriptions
+                </a>
+                <a href="{{ path('app_infos_new') }}" class="bouton bouton-admin">
                     <img id="icon-admin-profil" src="{{ asset(app.user.color == 0 ? 'icones/white/profil.png' : 'icones/black/profil.png') }}" alt="Icône" class="image">
                     Ajouter Infos
+                </a>
+                <a href="{{ path('admin_statistiques') }}" class="bouton bouton-admin">
+                    <img id="icon-admin-stats" src="{{ asset(app.user.color == 0 ? 'icones/white/stats.png' : 'icones/black/stats.png') }}" alt="Icône" class="image">
+                    Statistiques
                 </a>
             {% endif %}
         </div>

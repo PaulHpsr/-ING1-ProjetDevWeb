@@ -3,41 +3,52 @@
 {% block title %}Vérification des utilisateurs | Admin{% endblock %}
 
 {% block body %}
+    {% include 'recherche.html.twig' %}
+    {% include 'template.html.twig' %}
+<body class="user-verification-page">
+        <h1 class="text-center">Vérification des utilisateurs</h1>
 
-    <h1>Vérification des utilisateurs</h1>
+        <!-- Message flash de succès -->
+        {% if app.session.flashbag.has('success') %}
+            <div class="alert alert-success">
+                {% for message in app.session.flashbag.get('success') %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-    {% if app.session.flashbag.has('success') %}
-        <div class="alert alert-success">
-            {% for message in app.session.flashbag.get('success') %}
-                <p>{{ message }}</p>
-            {% endfor %}
+        <!-- Table des utilisateurs à vérifier -->
+        <div class="verification-table-container">
+            <table class="verification-table">
+                <thead>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Date de naissance</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in pendingUsers %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.firstName }} {{ user.lastName }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.birthdate|date('d/m/Y') }}</td>
+                            <td>
+                                <form action="{{ path('admin_validate_user', { 'id': user.id }) }}" method="POST">
+                                    <button type="submit" class="btn btn-primary">Valider</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="no-user">Aucun utilisateur en attente de validation.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    {% endif %}
-
-    <table>
-        <thead>
-            <tr>
-                <th>Pseudo</th>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Date de naissance</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in pendingUsers %}
-                <tr>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.firstName }} {{ user.lastName }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.birthdate|date('d/m/Y') }}</td>
-                    <td>
-                        <form action="{{ path('admin_validate_user', { 'id': user.id }) }}" method="POST">
-                            <button type="submit" class="btn btn-primary">Valider</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+</body>
 {% endblock %}

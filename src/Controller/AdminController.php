@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use App\Repository\SignalementRepository;
+
+
 class AdminController extends AbstractController
 {
     // Afficher la liste des utilisateurs
@@ -28,19 +31,27 @@ class AdminController extends AbstractController
     }
 
 
-    // Bannir un utilisateur
     #[Route('/admin/bannir/{id}', name: 'admin_ban_user', methods: ['POST'])]
-    public function banUser(User $user, EntityManagerInterface $entityManager): Response
+    public function banUser(User $user, EntityManagerInterface $entityManager, SignalementRepository $signalementRepository): Response
     {
-        // Bannir l'utilisateur (ici, on le supprime)
+        // Supprimez tous les signalements liés à cet utilisateur
+        $signalements = $signalementRepository->findBy(['reportedUser' => $user]);
+        
+        foreach ($signalements as $signalement) {
+            $entityManager->remove($signalement);
+        }
+        
+        // Supprimer l'utilisateur
         $entityManager->remove($user);
         $entityManager->flush();
-
+    
         // Message de succès
-        $this->addFlash('success', 'Utilisateur banni avec succès !');
-
+        $this->addFlash('success', 'Utilisateur banni et ses signalements supprimés avec succès !');
+    
         return $this->redirectToRoute('admin_users');
     }
+    
+    
 
     // Afficher la liste des signalements
     #[Route('/admin/signalements', name: 'admin_signalements')]

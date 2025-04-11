@@ -1,21 +1,155 @@
-{# templates/objets_connectes/list.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Objets Connectés{% endblock %}
 
 {% block body %}
-    <h1>Liste des objets connectés</h1>
+    {% include 'recherche.html.twig' %}
+    {% include 'template.html.twig' %}
+<body class="objets-list-page theme-light">
+
+    <h1 class="text-center mb-4">Liste des objets connectés</h1>
 
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COMPLEX') %}
+      <div class="action-buttons">
         <a href="{{ path('objets_connectes_add') }}" class="btn btn-primary">Ajouter un objet connecté</a>
+      </div>
     {% endif %}
 
-    <ul>
-        {% for objet in objets %}
-            <li>
-                <a href="{{ path('objets_connectes_show', {'id': objet.id}) }}">{{ objet.nom }}</a>
-                - {{ objet.type }}
-            </li>
-        {% endfor %}
+    <ul class="objets-list">
+      {% for objet in objets %}
+        <li class="objet-item">
+          <a href="{{ path('objets_connectes_show', {'id': objet.id}) }}">{{ objet.nom }}</a>
+          <span class="objet-type">- {{ objet.type }}</span>
+        </li>
+      {% else %}
+        <li class="no-objet">Aucun objet connecté trouvé.</li>
+      {% endfor %}
     </ul>
+</body>
+{% endblock %}
+
+{% block stylesheets %}
+
+<style>
+  /* Base de la page */
+body.objets-list-page {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Thème clair */
+body.objets-list-page.theme-light {
+  background-color: #FAF9F6;  /* Blanc cassé */
+  color: #333;              /* Texte foncé */
+}
+
+/* Thème sombre */
+body.objets-list-page.theme-dark {
+  background-color: #1F1F1F;  /* Gris anthracite */
+  color: #F5F5F5;             /* Texte clair */
+}
+
+/* Conteneur principal */
+.container {
+  margin: 2rem auto;
+  max-width: 800px;
+  padding: 2rem;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.objets-list-page.theme-dark .container {
+  background-color: #2A2A2A;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Titre */
+h1.text-center {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  transition: color 0.3s ease;
+}
+
+/* Bouton d'action */
+.action-buttons {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Boutons */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #007BFF;
+  color: #FFF;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+body.objets-list-page.theme-dark .btn {
+  background-color: #0056b3;
+}
+
+body.objets-list-page.theme-dark .btn:hover {
+  background-color: #003d80;
+}
+
+/* Liste des objets */
+.objets-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.objet-item {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+body.objets-list-page.theme-dark .objet-item {
+  border-color: #444;
+}
+
+.objet-item a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+}
+
+.objet-item .objet-type {
+  margin-left: 0.5rem;
+  color: #777;
+}
+
+body.objets-list-page.theme-dark .objet-item .objet-type {
+  color: #bbb;
+}
+
+/* Message Aucun objet */
+.no-objet {
+  text-align: center;
+  padding: 1rem;
+  color: #888;
+}
+
+body.objets-list-page.theme-dark .no-objet {
+  color: #AAA;
+}
+</style>
 {% endblock %}

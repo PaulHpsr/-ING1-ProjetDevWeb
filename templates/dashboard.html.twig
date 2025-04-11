@@ -3,77 +3,71 @@
 {% block title %}Tableau de Bord{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1 class="text-center">Tableau de Bord</h1>
+    {% include 'recherche.html.twig' %}
+    {% include 'template.html.twig' %}
 
-    <div class="statistics-section mt-5">
-        <h2>Consommation Énergétique</h2>
-        
-        <!-- Graphique pour la consommation énergétique quotidienne -->
-        <canvas id="dailyConsumptionChart" width="400" height="200"></canvas>
+<h1>Consommation Électrique Totale : {{ totalConsumption|default(0) }} kWh</h1>
+  
+  <h2>Répartition de la consommation par type</h2>
+  <!-- Taille du canvas réduite pour un graph plus petit -->
+  <canvas id="consumptionChart" width="300" height="300"></canvas>
 
-        <!-- Graphique pour la consommation énergétique hebdomadaire -->
-        <canvas id="weeklyConsumptionChart" width="400" height="200"></canvas>
-    </div>
+  <p>Nombre d'objets déconnectés : {{ disconnectedCount }}</p>
+  <p>Énergie économisée (objets déconnectés) : {{ disconnectedConsumption|default(0) }} kWh</p>
 
-    <!-- Inclure Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <script>
-        // Graphique de la consommation quotidienne
-        const dailyConsumptionCtx = document.getElementById('dailyConsumptionChart').getContext('2d');
-        new Chart(dailyConsumptionCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Aujourd\'hui'],
-                datasets: [{
-                    label: 'Consommation énergétique (kWh)',
-                    data: [{{ dailyConsumption }}], // Données de consommation quotidienne
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: true }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+  {# Chargement de Chart.js via un CDN #}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Transformation des données issues du contrôleur en format JSON
+    const groupedData = {{ groupedData|json_encode|raw }};
 
-        // Graphique de la consommation hebdomadaire
-        const weeklyConsumptionCtx = document.getElementById('weeklyConsumptionChart').getContext('2d');
-        new Chart(weeklyConsumptionCtx, {
-            type: 'line',
-            data: {
-                labels: {{ consumptionPerDay|map(day => day.day)|json_encode|raw }}, // Jours de la semaine
-                datasets: [{
-                    label: 'Consommation énergétique (kWh)',
-                    data: {{ consumptionPerDay|map(day => day.consumption)|json_encode|raw }}, // Consommation par jour
-                    fill: false,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: true }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
+    // On prépare les labels (types) et les valeurs correspondantes
+    const labels = groupedData.map(item => item.type);
+    const dataValues = groupedData.map(item => parseFloat(item.consumption));
+
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: 'Consommation par type (kWh)',
+        data: dataValues,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.7)',
+          'rgba(54, 162, 235, 0.7)',
+          'rgba(255, 206, 86, 0.7)',
+          'rgba(75, 192, 192, 0.7)',
+          'rgba(153, 102, 255, 0.7)',
+          'rgba(255, 159, 64, 0.7)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    };
+
+    const config = {
+      type: 'pie', // Vous pouvez changer en 'bar', 'doughnut', etc.
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          }
+        }
+      }
+    };
+
+    // Création du graph
+    const consumptionChart = new Chart(
+      document.getElementById('consumptionChart'),
+      config
+    );
+  </script>
 </div>
 {% endblock %}

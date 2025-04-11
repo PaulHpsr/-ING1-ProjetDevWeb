@@ -1,72 +1,52 @@
 <?php
-
+// src/Controller/EnergyConsumptionController.php
 namespace App\Controller;
 
 use App\Entity\ObjetsConnectes;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_dashboard')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        // Vérification des rôles (Accès limité aux utilisateurs avec ROLE_COMPLEX ou ROLE_ADMIN)
-        if (!$this->isGranted('ROLE_COMPLEX') && !$this->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException('Accès refusé');
-        }
+        // 1. Consommation totale pour les objets connectés (état != "déconnecté")
+        $qbTotal = $entityManager->createQueryBuilder();
+        $qbTotal->select('SUM(o.consommationEnergetique) as totalConsumption')
+            ->from(ObjetsConnectes::class, 'o')
+            ->where('o.etat != :etat')
+            ->setParameter('etat', 'déconnecté');
+        $totalConsumption = $qbTotal->getQuery()->getSingleScalarResult();
 
-        // Début de la semaine et début de la journée
-        $startOfWeek = (new \DateTime('monday this week'))->setTime(0, 0, 0);
-        $startOfDay = (new \DateTime('today'))->setTime(0, 0, 0);
+        // 2. Répartition de la consommation par type (pour les objets connectés)
+        $qbGroup = $entityManager->createQueryBuilder();
+        $qbGroup->select('o.type, SUM(o.consommationEnergetique) as consumption')
+            ->from(ObjetsConnectes::class, 'o')
+            ->where('o.etat != :etat')
+            ->groupBy('o.type')
+            ->setParameter('etat', 'déconnecté');
+        $groupedData = $qbGroup->getQuery()->getResult();
 
-        // Repository des objets connectés
-        $repository = $entityManager->getRepository(ObjetsConnectes::class);
+        // 3. Récupérer le nombre d'objets déconnectés et la somme de leur consommation
+        $qbDisconnected = $entityManager->createQueryBuilder();
+        $qbDisconnected->select('COUNT(o) as disconnectedCount, SUM(o.consommationEnergetique) as disconnectedConsumption')
+            ->from(ObjetsConnectes::class, 'o')
+            ->where('o.etat = :etat')
+            ->setParameter('etat', 'déconnecté');
+        $disconnectedData = $qbDisconnected->getQuery()->getOneOrNullResult();
+        
+        $disconnectedCount = $disconnectedData['disconnectedCount'] ?? 0;
+        // si aucun enregistrement, SUM pourra retourner null, on force donc 0
+        $disconnectedConsumption = $disconnectedData['disconnectedConsumption'] ?? 0;
 
-        // Récupération des données
-        $dailyConsumption = $repository->getDailyConsumption($startOfDay);
-        $weeklyConsumption = $repository->getWeeklyConsumption($startOfWeek);
-        $consumptionPerDay = $this->groupConsumptionPerDay($repository, $startOfWeek);
-
-        // Rendu de la vue
         return $this->render('dashboard.html.twig', [
-            'dailyConsumption' => $dailyConsumption,
-            'weeklyConsumption' => $weeklyConsumption,
-            'consumptionPerDay' => $consumptionPerDay, // Données pour le graphique hebdomadaire
+            'totalConsumption'       => $totalConsumption,
+            'groupedData'            => $groupedData,
+            'disconnectedCount'      => $disconnectedCount,
+            'disconnectedConsumption'=> $disconnectedConsumption,
         ]);
-    }
-
-    /**
-     * Regroupe la consommation énergétique par jour à l'échelle du serveur PHP.
-     *
-     * @param ObjetsConnectesRepository $repository
-     * @param \DateTimeInterface $startOfWeek
-     * @return array
-     */
-    private function groupConsumptionPerDay($repository, \DateTimeInterface $startOfWeek): array
-    {
-        // Récupérer les données des objets connectés depuis la base
-        $results = $repository->createQueryBuilder('o')
-            ->select('o.derniereInteraction as interactionDate, SUM(o.consommationEnergetique) as consumption')
-            ->where('o.derniereInteraction >= :startOfWeek')
-            ->setParameter('startOfWeek', $startOfWeek)
-            ->groupBy('o.derniereInteraction') // Regroupe les dates complètes
-            ->orderBy('o.derniereInteraction', 'ASC')
-            ->getQuery()
-            ->getResult();
-
-        // Grouper par jour à l'échelle du serveur
-        $groupedResults = [];
-        foreach ($results as $result) {
-            $day = $result['interactionDate']->format('Y-m-d'); // Transforme en jour seulement
-            if (!isset($groupedResults[$day])) {
-                $groupedResults[$day] = 0;
-            }
-            $groupedResults[$day] += $result['consumption']; // Additionne les consommations par jour
-        }
-
-        return $groupedResults;
     }
 }
