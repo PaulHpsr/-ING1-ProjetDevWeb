@@ -116,32 +116,43 @@ Pour faire fonctionner le projet, vous devez installer :
 
 ![Texte alternatif](demo/configData.png)
 
-4. **Configurer la Messagerie Automatisée**:
+### 4. **Configurer la Messagerie Automatisée**:
 Le projet peut envoyer automatiquement des e-mails (pour la confirmation d'inscription, par exemple).
-  - Toujours dans le fichier .env, repérez les lignes concernant la messagerie (qui comportent généralement des paramètres SMTP comme le serveur, l'identifiant et le mot de passe).
-  - Remplissez ces champs avec les informations fournies par votre service de messagerie.
 
+  - **Modifier le Fichier `.env`**
+      (il est important de noter qu'il faut générer un mot de passe app pour votre compte google en suivant un [Symfony]([https://symfony.com/download](https://support.google.com/mail/thread/205453566/how-to-generate-an-app-password?hl=en)))
+      Toujours dans le fichier .env, repérez les lignes concernant la messagerie :
+      ```dotenv
+      MAILER_DSN=smtp://VotreEmail@gmail.com:VotreMotDePasseApp@smtp.gmail.com:587?encryption=tls&auth_mode=login
+      
     ![Texte alternatif](demo/configMailer.png)
     
-5. **Mettre à Jour la Base de Données et Créer l'Utilisateur Administrateur**:
+### 5. **Mettre à Jour la Base de Données et Créer l'Utilisateur Administrateur**:
    Pour préparer la base de données et créer automatiquement un compte administrateur (de gestion), procédez ainsi :
-   - Créer la Base Dans le même terminal, tapez :
+   
+   - **Créer la Base de Données** Ouvrez un terminal dans le dossier du projet et tapez :
+     ```dotenv
      php bin/console doctrine:database:create
-   - Lancer les Migrations Puis, tapez :
+     
+   - **Lancer les Migrations** Exécutez ensuite :
+     ```dotenv
      php bin/console doctrine:migrations:migrate
 
-   Ces commandes vont configurer votre base de données et créer les tables nécessaires, y compris un utilisateur administrateur (souvent défini par défaut, par exemple avec l'identifiant admin et le mot de passe admin).
+   Ces commandes vont configurer votre base de données et créer les tables nécessaires, y compris un utilisateur administrateur.
 
-6. **Lancer le Site Web avec le Serveur Symfony**:
-   Maintenant que la configuration est terminée, vous pouvez lancer le site sur votre ordinateur.
-   - Ouvrir le Terminal (ou Invite de Commandes)
-Sur Windows : Cliquez sur le menu Démarrer et tapez "Invite de commandes" ou "PowerShell".
-Sur macOS ou Linux : Ouvrez le Terminal depuis vos applications.
+### 6. **Lancer le Site Web avec le Serveur Symfony**:
+   - **Ouvrir le Terminal**
+     - Sur Windows : Cliquez sur le menu Démarrer et recherchez "Invite de commandes" ou "PowerShell".
+     - Sur macOS/Linux : Ouvrez le Terminal via vos applications.
 
-- Naviguer Dans le Dossier du Projet Tapez la commande suivante en remplaçant chemin/vers/le/projet par le chemin réel du dossier :
-      cd chemin/vers/le/projet
+  - **Naviguer dans le Dossier du Projet**
+    Utilisez la commande (remplacez chemin/vers/le/projet par le chemin réel) :
+    ```dotenv
+    cd chemin/vers/le/projet
 
-- Démarrer le Serveur Tapez la commande suivante pour lancer le serveur de Symfony :
+- **Démarrer le Serveur Symfony**
+  Tapez la commande suivante :
+    ```dotenv
     symfony serve
 
 - Accéder au Site Ouvrez votre navigateur internet (comme Chrome, Firefox ou Edge) et allez à l'adresse http://127.0.0.1:8000. Vous devriez voir la page d'accueil du projet.
