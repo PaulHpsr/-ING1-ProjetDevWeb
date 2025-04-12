@@ -152,9 +152,9 @@ Le projet peut envoyer automatiquement des e-mails (pour la confirmation d'inscr
 
 - **Démarrer le Serveur Symfony**
   Tapez la commande suivante :
-    ```dotenv
+    ```
     symfony serve
-
+    ```
 - Accéder au Site Ouvrez votre navigateur internet (comme Chrome, Firefox ou Edge) et allez à l'adresse http://127.0.0.1:8000. Vous devriez voir la page d'accueil du projet.
 
     
