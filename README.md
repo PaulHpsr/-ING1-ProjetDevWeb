@@ -44,7 +44,7 @@ Les administrateurs bénéficient également d’un espace dédié pour :
   Analysez la consommation énergétique et les économies réalisées via des graphiques et rapports détaillés.
 
 - **Administration**  
-  Accessible via un compte admin (exemple : `admin/admin`) pour :
+  Accessible via un compte admin pour :
   - Gérer les utilisateurs.
   - Valider les inscriptions et traiter les signalements.
   - Publier des actualités.
