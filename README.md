@@ -76,7 +76,11 @@ Les administrateurs bénéficient également d’un espace dédié pour :
 - Gérer les utilisateurs et valider les inscriptions.
 - Traiter les signalements et publier des actualités.
 - Consulter et exporter des statistiques détaillées.
-
+- Il faudra utiliser les login suivants :
+  ```dotenv
+  email : admin@gmail.com
+  mot de passe : admin123
+```
 ## Installation
 
 ### 1. Télécharger le Projet
