@@ -4,9 +4,10 @@
 
 {% block body %}
 
-<body class="login-page">
+<body class="register-page">
     <div class="overlay">
-        <!-- Logo Section -->
+
+
         <a href="{{ path('app_landing') }}" class="logo">
             <img src="{{ asset('icones/cacaboudin.jpg') }}" alt="Icône" class="image">CY Entreprise
         </a>
@@ -14,12 +15,13 @@
         <!-- Formulaire de Connexion -->
         <div class="container">
             <h1>Se connecter</h1>
+            
             <form method="post" action="{{ path('app_login') }}">
                 <label for="username">Email</label>
-                <input type="text" id="username" name="_username" class="form-control" placeholder="Email" required>
-                
+                <input type="email" id="username" name="_username" class="form-control" placeholder="Email" required autocomplete="off">
+
                 <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="_password" class="form-control" placeholder="Mot de passe" required>
+                <input type="password" id="password" name="_password" class="form-control" placeholder="Mot de passe" required autocomplete="new-password">
                 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 

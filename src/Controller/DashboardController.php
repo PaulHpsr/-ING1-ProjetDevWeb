@@ -42,6 +42,20 @@ class DashboardController extends AbstractController
         // si aucun enregistrement, SUM pourra retourner null, on force donc 0
         $disconnectedConsumption = $disconnectedData['disconnectedConsumption'] ?? 0;
 
+
+        // Ajout de POINTS
+    $user = $this->getUser();
+
+    if ($user && $user->getPoints() < 10) {
+        // Ajout de 1 point pour visiter cette page
+     $user->setPoints($user->getPoints() + 1);
+
+     // Utiliser l'EntityManager correctement
+     $entityManager->persist($user);
+        $entityManager->flush();
+    }
+
+
         return $this->render('dashboard.html.twig', [
             'totalConsumption'       => $totalConsumption,
             'groupedData'            => $groupedData,

@@ -26,13 +26,20 @@ class ObjetsConnecteController extends AbstractController
 
     // Page technique d'un objet connecté
     #[Route('/objets/{id}', name: 'objets_connectes_show', requirements: ['id' => '\d+'])]
-    public function showObject(ObjetsConnectes $objet): Response
+    public function showObject(ObjetsConnectes $objet, EntityManagerInterface $entityManager): Response
     {
-        // L'utilisateur doit avoir un rôle 'ROLE_ADMIN' ou 'ROLE_COMPLEX' pour consulter l'objet
-        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_COMPLEX')) {
-            throw $this->createAccessDeniedException();
-        }
-        
+       
+        // Ajout de POINTS
+    $user = $this->getUser();
+
+    if ($user && $user->getPoints() < 10) {
+        // Ajout de 1 point pour visiter cette page
+     $user->setPoints($user->getPoints() + 1);
+
+     // Utiliser l'EntityManager correctement
+     $entityManager->persist($user);
+        $entityManager->flush();
+    }
 
         return $this->render('objets_connectes/show.html.twig', [
             'objet' => $objet,
@@ -81,6 +88,18 @@ public function editObject(Request $request, ObjetsConnectes $objet, EntityManag
 
         $this->addFlash('success', 'L\'objet connecté a été modifié avec succès!');
         return $this->redirectToRoute('objets_connectes_show', ['id' => $objet->getId()]);
+    }
+
+    // Ajout de POINTS
+    $user = $this->getUser();
+
+    if ($user && $user->getPoints() < 10) {
+        // Ajout de 1 point pour visiter cette page
+     $user->setPoints($user->getPoints() + 1);
+
+     // Utiliser l'EntityManager correctement
+     $entityManager->persist($user);
+        $entityManager->flush();
     }
 
     return $this->render('objets_connectes/edit.html.twig', [

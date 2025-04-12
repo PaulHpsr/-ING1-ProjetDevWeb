@@ -5,27 +5,31 @@
 {% block body %}
     {% include 'recherche.html.twig' %}
     {% include 'template.html.twig' %}
-<body class="home-page">
+    <body class="home-page">
+        <div class="main">
+            <!-- Section des actualités -->
+            <section class="actualites">
+                <h2>Actualités du Bâtiment</h2>
+                <div class="actualites-container">
+                    {% for info in infos %}
+                        <div class="actualite">
+                            <h3 class="actualite-titre">{{ info.title }}</h3>
+                            
+                            {% if info.imagePath %}
+                                <img style="max-width: 100%; max-height: 300px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;" src="{{ asset('uploads/profiles/' ~ info.imagePath) }}" alt="{{ info.title }}" />
 
-
-    <div class="main">
-        <!-- Section des actualités -->
-        <section class="actualites">
-            <h2>Actualités du Bâtiment</h2>
-            <div class="actualites-container">
-                {% for info in infos %}
-                    <div class="actualite">
-                        <h3 class="actualite-titre">{{ info.title }}</h3>
-                        <p class="actualite-contenu">{{ info.content|slice(0, 200) }}...</p>
-                        <p class="actualite-details">
-                            <em>Publié par {{ info.publisher.username }} le {{ info.publishDate|date('d/m/Y') }}</em>
-                        </p>
-                    </div>
-                {% else %}
-                    <p class="aucune-actualite">Aucune actualité disponible.</p>
-                {% endfor %}
-            </div>
-        </section>
-    </div>
-</body>
+                            {% endif %}
+                            
+                            <p class="actualite-contenu">{{ info.content|slice(0, 200) }}...</p>
+                            <p class="actualite-details">
+                                <em>Publié par {{ info.publisher.username }} le {{ info.publishDate|date('d/m/Y') }}</em>
+                            </p>
+                        </div>
+                    {% else %}
+                        <p class="aucune-actualite">Aucune actualité disponible.</p>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </body>
 {% endblock %}

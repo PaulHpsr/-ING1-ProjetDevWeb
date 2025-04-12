@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255)]
     private ?string $memberType = null;  // Type de membre (développeur, testeur, etc.)
 
-    #[ORM\Column(type: "string", nullable: true, options: ["default" => "public/icones/black/profil.png"])]
+    #[ORM\Column(type: "string", nullable: true, options: ["default" => "icones/black/profil.png"])]
     private ?string $profilePicture = null;  // URL de la photo de profil
 
     // Système de points
@@ -117,13 +117,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->points >= 10) {
             $this->experienceLevel = "expert";
-            $this->roles = ["ROLE_ADMIN"]; // Rôle d'administrateur pour les utilisateurs experts
         } elseif ($this->points >= 5) {
             $this->experienceLevel = "advanced";
             $this->roles = ["ROLE_COMPLEX"]; // Rôle complexe pour les utilisateurs avancés
         } elseif ($this->points >= 3) {
             $this->experienceLevel = "intermediate";
-            $this->roles = ["ROLE_SIMPLE"]; // Rôle simple pour les utilisateurs intermédiaires
         } else {
             $this->experienceLevel = "beginner";
             $this->roles = ["ROLE_SIMPLE"]; // Rôle débutant pour les utilisateurs débutants

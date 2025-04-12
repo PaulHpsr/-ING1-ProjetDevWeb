@@ -26,23 +26,24 @@ class InfosController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('imagePath')->getData();
 
-            if ($file) {
-                $newFilename = uniqid() . '.' . $file->guessExtension();
-                // Déplacer le fichier dans le répertoire des images avec gestion d'exception
-                try {
-                    $file->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                    // Enregistrer le nom du fichier dans l'entité Infos
-                    $info->setImagePath($newFilename);
-                } catch (\Exception $e) {
-                    $this->addFlash('error', "Une erreur s'est produite lors du téléchargement de l'image.");
-                    return $this->redirectToRoute('app_infos_new');
-                }
-            }
+            // Gérer l'upload de la photo de profil
+    $infoPictureFile = $form->get('imagePath')->getData();
+    if ($infoPictureFile) {
+        $newFilename = uniqid() . '.' . $infoPictureFile->guessExtension();
+
+        try {
+            $infoPictureFile->move(
+                $this->getParameter('profile_pictures_directory'),
+                $newFilename
+            );
+        } catch (FileException $e) {
+            $this->addFlash('error', 'Erreur lors de l\'upload de la photo de profil');
+            return $this->redirectToRoute('app_infos_new');
+        }
+
+        $info->setimagePath($newFilename);
+    }
 
             // Sauvegarder l'info dans la base de données
             $entityManager->persist($info);

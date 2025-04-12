@@ -10,7 +10,7 @@
 /* Transition globale pour un changement smooth */
 body {
     transition: background-color 0.5s ease, color 0.5s ease;
-    margin-left: 30rem;
+    margin-left: 25rem;
     padding: 0;
     overflow: auto;
     display: block; /* Change flex à block pour éviter le centrage global */
@@ -122,263 +122,6 @@ body.theme-dark .footer {
 
 
 /* ---------------------- */
-/* Login Page Styles      */
-/* ---------------------- */
-
-body.login-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-body.login-page.theme-light {
-    background-color: #FAF9F6; /* Blanc cassé */
-}
-
-body.login-page.theme-dark {
-    background-color: #1F1F1F; /* Gris anthracite */
-}
-
-.login-page .overlay {
-    position: relative;
-    width: 90%;
-    max-width: 400px;
-    background: rgba(255, 255, 255, 0.85); /* Fond clair */
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    backdrop-filter: blur(8px); /* Flou moderne */
-}
-
-body.login-page.theme-dark .overlay {
-    background: rgba(50, 50, 50, 0.9); /* Fond sombre */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-/* Logo spécifique pour Login */
-.login-page .logo {
-    font-family: 'Roboto', sans-serif;
-    color: inherit;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    text-decoration: none;
-    justify-content: center;
-}
-
-.login-page .logo .image {
-    width: 2rem;
-    height: 2rem;
-}
-
-/* Conteneur du formulaire */
-.login-page .container {
-    padding: 1rem;
-}
-
-.login-page h1 {
-    font-family: 'Roboto', sans-serif;
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    color: inherit;
-}
-
-.login-page label {
-    display: block;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    color: inherit;
-}
-
-.login-page input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-}
-
-body.login-page.theme-dark input {
-    background-color: #333;
-    color: white;
-    border: 1px solid #444;
-}
-
-/* Boutons */
-.login-page .bouton {
-    padding: 0.75rem 1.5rem;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 1rem;
-}
-
-.login-page .bouton:hover {
-    background-color: #0056b3;
-}
-
-body.login-page.theme-dark .bouton {
-    background-color: #0056b3;
-}
-
-body.login-page.theme-dark .bouton:hover {
-    background-color: #003d80;
-}
-
-/* ---------------------- */
-/* Register Page Styles   */
-/* ---------------------- */
-
-body.register-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-body.register-page.theme-light {
-    background-color: #FAF9F6; /* Blanc cassé */
-}
-
-body.register-page.theme-dark {
-    background-color: #1F1F1F; /* Gris anthracite */
-}
-
-/* Overlay */
-.register-page .overlay {
-    position: relative;
-    width: 90%;
-    max-width: 800px;
-    background: rgba(255, 255, 255, 0.85); /* Fond clair */
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    backdrop-filter: blur(8px); /* Flou moderne */
-}
-
-body.register-page.theme-dark .overlay {
-    background: rgba(50, 50, 50, 0.9); /* Fond sombre */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
-/* Logo spécifique */
-.register-page .logo {
-    font-family: 'Roboto', sans-serif;
-    color: inherit;
-    font-size: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    text-decoration: none;
-    justify-content: center;
-}
-
-.register-page .logo .image {
-    width: 3rem;
-    height: 3rem;
-}
-
-/* Conteneur de formulaire */
-.register-page .container {
-    padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.95); /* Fond clair */
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-body.register-page.theme-dark .container {
-    background-color: rgba(30, 30, 30, 0.95); /* Fond sombre */
-}
-
-/* Titre du formulaire */
-.register-page h1 {
-    font-family: 'Roboto', sans-serif;
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    color: inherit;
-}
-
-/* Styles des champs de formulaire */
-.register-page label {
-    display: block;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-    color: inherit;
-}
-
-.register-page input, .register-page select {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-}
-
-body.register-page.theme-dark input, body.register-page.theme-dark select {
-    background-color: #333;
-    color: white;
-    border: 1px solid #444;
-}
-
-/* Boutons */
-.register-page .bouton {
-    padding: 0.75rem 1.5rem;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.register-page .bouton:hover {
-    background-color: #0056b3;
-}
-
-body.register-page.theme-dark .bouton {
-    background-color: #0056b3;
-}
-
-body.register-page.theme-dark .bouton:hover {
-    background-color: #003d80;
-}
-
-/* Pied de page */
-.register-page .footer {
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.85rem;
-    margin-top: 2rem;
-    color: #888;
-    text-align: center;
-}
-
-body.register-page.theme-dark .footer {
-    color: #CCC;
-}
-
-
-/* ---------------------- */
 /* Navigation Bar Styles  */
 /* ---------------------- */
 
@@ -407,26 +150,28 @@ body.theme-dark .navigation-bar {
 
 /* Logo */
 .navigation-bar .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #2e2e2e; /* Clair */
-    margin-bottom: 2rem;
-    text-decoration: none;
-    transition: color 0.3s ease;
+  display: flex;
+  flex-direction: column; /* Positionner les éléments verticalement */
+  align-items: center;    /* Centrer horizontalement */
+  font-family: 'Roboto', sans-serif;
+  font-size: 2.5rem;      /* Taille de police augmentée */
+  font-weight: 600;
+  color: #2e2e2e;         /* Clair */
+  margin-bottom: 2rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 body.theme-dark .navigation-bar .logo {
-    color: #f4f4f4; /* Sombre */
+  color: #f4f4f4;         /* Sombre */
 }
 
 .navigation-bar .logo .image {
-    width: 2.5rem;
-    height: 2.5rem;
-    object-fit: cover;
+  width: 6rem;          /* Taille de l'image augmentée */
+  height: 6rem;
+  object-fit: cover;
+  border-radius: 50%;     /* Coins arrondis pour un effet circulaire */
+  margin-bottom: 2rem;  /* Espace entre l'image et le texte */
 }
 
 /* Boutons de navigation */
@@ -508,30 +253,6 @@ body.theme-dark .navigation-bar .bouton-admin {
 /* Barre de Recherche     */
 /* ---------------------- */
 
-body.search-bar-page {
-    position: fixed;
-    top: 0;
-    left: 18vw;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f9f9f9; /* Fond clair */
-    color: #333;
-    font-family: 'Roboto', sans-serif;
-    transition: background-color 0.5s ease, color 0.5s ease;
-    overflow: auto; /* Permet de scroller si nécessaire */
-}
-
-body.search-bar-page.theme-dark {
-    background-color: #1f1f1f; /* Fond sombre */
-    color: #f5f5f5;
-}
-
-body.search-bar-page.theme-dark header {
-    background-color: #2a2a2a; /* Fond sombre */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
 
 /* Champs de recherche */
 #search-box {
@@ -541,24 +262,11 @@ body.search-bar-page.theme-dark header {
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 1rem;
-    color: inherit;
+    color: black;
     background-color: #fff;
     transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-body.search-bar-page.theme-dark #search-box {
-    background-color: #333;
-    border-color: #444;
-    color: #fff;
-}
-
-#search-box::placeholder {
-    color: #aaa;
-}
-
-body.search-bar-page.theme-dark #search-box::placeholder {
-    color: #bbb;
-}
 
 /* Boîte de filtre */
 #filter-box {
@@ -568,15 +276,9 @@ body.search-bar-page.theme-dark #search-box::placeholder {
     border-radius: 8px;
     font-size: 1rem;
     background-color: #fff;
-    color: inherit;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
+    color: black;
 }
 
-body.search-bar-page.theme-dark #filter-box {
-    background-color: #333;
-    border-color: #444;
-    color: #fff;
-}
 
 /* Bouton de recherche */
 #button-box {
@@ -586,25 +288,11 @@ body.search-bar-page.theme-dark #filter-box {
     border: none;
     border-radius: 50%;
     background-color: #007BFF; /* Bleu vif */
-    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-#button-box:hover {
-    background-color: #0056b3;
-    transform: scale(1.1);
-}
-
-body.search-bar-page.theme-dark #button-box {
-    background-color: #0056b3; /* Bleu plus sombre */
-}
-
-body.search-bar-page.theme-dark #button-box:hover {
-    background-color: #003d80;
 }
 
 /* Icônes dans les boutons */
@@ -630,30 +318,15 @@ body.search-bar-page.theme-dark #button-box:hover {
     height: 1.5rem;
 }
 
-/* ---------------------- */
-/* Section Main - Actualités */
-/* ---------------------- */
 
-.main {
-    margin: 2rem auto;
-    max-width: 1200px;
-    padding: 1rem;
-    font-family: 'Roboto', sans-serif;
-}
 
-body.home-page.theme-light {
-    background-color: #e9e9e8; /* Blanc cassé */
-    color: #333; /* Texte foncé */
-}
 
-body.home-page.theme-dark {
-    background-color: #2d2c2c; /* Gris anthracite */
-    color: #F5F5F5; /* Texte clair */
-}
+
+
 
 /* Actualités container */
 .actualites {
-    margin: 2rem auto;
+    margin: 1rem auto;
     max-width: 1200px;
     padding: 2rem;
     border-radius: 12px;
@@ -691,34 +364,17 @@ body.home-page.theme-dark .actualites h2 {
     border-color: #444;
 }
 
-/* Grille des actualités */
-.actualites-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    
-}
 
-/* Cartes des actualités */
-.actualite {
-    padding: 1.5rem;
-    border-radius: 8px;
-    transition: transform 0.2s, box-shadow 0.2s ease, background-color 0.3s ease;
-}
 
-body.home-page.theme-light .actualite {
-    background-color: #FFFFFF;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
 
-body.home-page.theme-dark .actualite {
-    background-color: #333;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-}
+
+
+
+
 
 .actualite:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Titre de chaque carte d'actualité */
@@ -728,43 +384,17 @@ body.home-page.theme-dark .actualite {
     transition: color 0.3s ease;
 }
 
-body.home-page.theme-light .actualite-titre {
-    color: #007BFF;
-}
 
-body.home-page.theme-dark .actualite-titre {
-    color: #66C2FF; /* Bleu clair */
-}
 
-/* Contenu de chaque carte */
-.actualite-contenu {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    transition: color 0.3s ease;
-}
 
-body.home-page.theme-light .actualite-contenu {
-    color: #555;
-}
 
-body.home-page.theme-dark .actualite-contenu {
-    color: #CCC;
-}
+
 
 /* Détails des actualités */
 .actualite-details {
     font-size: 0.9rem;
     text-align: right;
     transition: color 0.3s ease;
-}
-
-body.home-page.theme-light .actualite-details {
-    color: #888;
-}
-
-body.home-page.theme-dark .actualite-details {
-    color: #AAA;
 }
 
 /* Message "Aucune actualité" */
@@ -775,6 +405,18 @@ body.home-page.theme-dark .actualite-details {
     transition: color 0.3s ease;
 }
 
+.actualite img {
+  max-width: 100%;
+  max-height: 300px;           /* Fixe une hauteur maximale */
+  width: auto;
+  height: auto;
+  object-fit: contain;         /* Adaptation de l'image dans le conteneur sans la déformer */
+  display: block;
+  margin: 0 auto;
+}
+
+
+
 body.home-page.theme-light .aucune-actualite {
     color: #888;
 }
@@ -783,42 +425,13 @@ body.home-page.theme-dark .aucune-actualite {
     color: #AAA;
 }
 
+
 /* -----------------------------------------------------------------------------
    Signalements Page Styles
 ----------------------------------------------------------------------------- */
-body.signalements-page {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    font-family: 'Roboto', sans-serif;
-    transition: background-color 0.5s ease, color 0.5s ease;
-  }
+
+
   
-  body.signalements-page.theme-light {
-    background-color: #FAF9F6; /* Blanc cassé */
-    color: #333;
-  }
-  
-  body.signalements-page.theme-dark {
-    background-color: #1F1F1F; /* Gris anthracite */
-    color: #F5F5F5;
-  }
-  
-  /* Container pour les signalements */
-  .signalements-container {
-    margin: 2rem auto;
-    max-width: 1200px;
-    padding: 1rem;
-    background-color: #FFFFFF;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  body.signalements-page.theme-dark .signalements-container {
-    background-color: #2A2A2A;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
   
   /* Table des signalements */
   .table {
@@ -857,30 +470,8 @@ body.signalements-page {
     color: #F5F5F5;
   }
   
-  /* Bouton Supprimer */
-  .btn {
-    padding: 6px 12px;
-    background-color: #D9534F;
-    color: #FFF;
-    border: none;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  
-  .btn:hover {
-    background-color: #C9302C;
-    transform: scale(1.05);
-  }
-  
-  body.signalements-page.theme-dark .btn {
-    background-color: #C9302C;
-  }
-  
-  body.signalements-page.theme-dark .btn:hover {
-    background-color: #A12121;
-  }
+
+ 
   
   /* Message "Aucun signalement" */
   .text-center {
@@ -893,23 +484,7 @@ body.signalements-page {
   /* -----------------------------------------------------------------------------
    Statistiques Page Styles
 ----------------------------------------------------------------------------- */
-body.statistiques-page {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    font-family: 'Roboto', sans-serif;
-    transition: background-color 0.5s ease, color 0.5s ease;
-  }
-  
-  body.statistiques-page.theme-light {
-    background-color: #FAF9F6;
-    color: #333;
-  }
-  
-  body.statistiques-page.theme-dark {
-    background-color: #1F1F1F;
-    color: #F5F5F5;
-  }
+
   
   /* Conteneur principal */
   .container {
@@ -922,10 +497,7 @@ body.statistiques-page {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
   
-  body.statistiques-page.theme-dark .container {
-    background-color: #2A2A2A;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
+
   
   /* Titres */
   .container h1 {
@@ -963,13 +535,7 @@ body.statistiques-page {
     transition: color 0.3s ease;
   }
   
-  body.statistiques-page.theme-light .rapport p {
-    color: #555;
-  }
-  
-  body.statistiques-page.theme-dark .rapport p {
-    color: #CCC;
-  }
+
   
   /* Exporter les rapports */
   .export-container {
@@ -982,9 +548,7 @@ body.statistiques-page {
     color: black;
   }
   
-  body.statistiques-page.theme-dark .export-container {
-    background-color: #333;
-  }
+
   
   .export-container a {
     margin: 0.5rem;
@@ -1004,9 +568,7 @@ body.statistiques-page {
     background-color: #0056b3;
   }
   
-  body.statistiques-page.theme-dark .btn-primary {
-    background-color: #0056b3;
-  }
+
   
   .export-container .btn-secondary {
     background-color: #6C757D;
@@ -1015,31 +577,12 @@ body.statistiques-page {
   .export-container .btn-secondary:hover {
     background-color: #565D64;
   }
-  
-  body.statistiques-page.theme-dark .btn-secondary {
-    background-color: #565D64;
-  }
+
   
 /* -----------------------------------------------------------------------------
    User List Page Styles
 ----------------------------------------------------------------------------- */
-body.user-list-page {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    font-family: 'Roboto', sans-serif;
-    transition: background-color 0.5s ease, color 0.5s ease;
-  }
-  
-  body.user-list-page.theme-light {
-    background-color: #FAF9F6;
-    color: #333;
-  }
-  
-  body.user-list-page.theme-dark {
-    background-color: #1F1F1F;
-    color: #F5F5F5;
-  }
+
   
   /* Conteneur principal */
   .container {
@@ -1052,10 +595,7 @@ body.user-list-page {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
   
-  body.user-list-page.theme-dark .container {
-    background-color: #2A2A2A;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
+
   
   /* Titre */
   .container h1 {
@@ -1065,13 +605,7 @@ body.user-list-page {
     transition: color 0.3s ease;
   }
   
-  body.user-list-page.theme-light h1 {
-    color: #333;
-  }
-  
-  body.user-list-page.theme-dark h1 {
-    color: #F5F5F5;
-  }
+
   
   /* Table des utilisateurs */
   .user-table {
@@ -1089,30 +623,19 @@ body.user-list-page {
     transition: background-color 0.3s ease, color 0.3s ease;
   }
   
-  body.user-list-page.theme-dark .user-table th,
-  body.user-list-page.theme-dark .user-table td {
-    border-color: #444;
-  }
+
   
   .user-table th {
     background-color: #F2F2F2;
     color: #333;
   }
   
-  body.user-list-page.theme-dark .user-table th {
-    background-color: #333;
-    color: #FFF;
-  }
-  
+
   .user-table td {
     background-color: #FFF;
     color: inherit;
   }
-  
-  body.user-list-page.theme-dark .user-table td {
-    background-color: #2A2A2A;
-    color: #F5F5F5;
-  }
+
   
   /* Bouton Bannir */
   .btn {
@@ -1126,18 +649,8 @@ body.user-list-page {
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
   
-  .btn:hover {
-    background-color: #C9302C;
-    transform: scale(1.05);
-  }
-  
-  body.user-list-page.theme-dark .btn {
-    background-color: #C9302C;
-  }
-  
-  body.user-list-page.theme-dark .btn:hover {
-    background-color: #A12121;
-  }
+
+ 
   
   /* Message Aucun utilisateur */
   .no-user {
@@ -1155,25 +668,7 @@ body.user-list-page {
 /* User Verification Page */
 /* ---------------------- */
 
-body.user-verification-page {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    font-family: 'Roboto', sans-serif;
-    transition: background-color 0.5s ease, color 0.5s ease;
-  }
-  
-  /* Thème clair */
-  body.user-verification-page.theme-light {
-    background-color: #FAF9F6; /* Blanc cassé */
-    color: #333; /* Texte foncé */
-  }
-  
-  /* Thème sombre */
-  body.user-verification-page.theme-dark {
-    background-color: #1F1F1F; /* Gris anthracite */
-    color: #F5F5F5; /* Texte clair */
-  }
+
   
   /* Conteneur principal */
   .container {
@@ -1186,10 +681,7 @@ body.user-verification-page {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
   
-  body.user-verification-page.theme-dark .container {
-    background-color: #2A2A2A; /* Fond sombre */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
+
   
   /* Titre principal */
   .container h1 {
@@ -1199,13 +691,7 @@ body.user-verification-page {
     transition: color 0.3s ease;
   }
   
-  body.user-verification-page.theme-light h1 {
-    color: #333;
-  }
-  
-  body.user-verification-page.theme-dark h1 {
-    color: #F5F5F5;
-  }
+
   
   /* Table de vérification */
   .verification-table {
@@ -1224,23 +710,14 @@ body.user-verification-page {
     /* Pas de couleur définie ici pour permettre l'héritage */
   }
   
-  /* En mode sombre, ajustement de la bordure */
-  body.user-verification-page.theme-dark .verification-table th,
-  body.user-verification-page.theme-dark .verification-table td {
-    border-color: #444;
-  }
+
   
   /* En mode clair, les en-têtes */
   .verification-table th {
     background-color: #F2F2F2;
     color: #333;
   }
-  
-  /* En mode sombre pour les en-têtes */
-  body.user-verification-page.theme-dark .verification-table th {
-    background-color: #333;
-    color: #FFF;
-  }
+
   
   /* Cellules de données en mode clair */
   .verification-table td {
@@ -1248,11 +725,7 @@ body.user-verification-page {
     color: inherit; /* Hérite de la couleur définie par le body */
   }
   
-  /* En mode sombre, forcer la couleur dans les td */
-  body.user-verification-page.theme-dark .verification-table td {
-    background-color: #2A2A2A;
-    color: #F5F5F5;
-  }
+
   
   /* Bouton Valider */
   .btn {
@@ -1271,13 +744,6 @@ body.user-verification-page {
     transform: scale(1.05);
   }
   
-  body.user-verification-page.theme-dark .btn {
-    background-color: #0056b3;
-  }
-  
-  body.user-verification-page.theme-dark .btn:hover {
-    background-color: #003d80;
-  }
   
   /* Message Aucun utilisateur */
   .verification-table .no-user {
@@ -1294,26 +760,7 @@ body.user-verification-page {
 /*****************/
 /*****  Profil edit ************/
 
-/* Base de la page */
-body.profile-edit-page {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    font-family: 'Roboto', sans-serif;
-    transition: background-color 0.5s ease, color 0.5s ease;
-  }
-  
-  /* Thème clair */
-  body.profile-edit-page.theme-light {
-    background-color: #FAF9F6; /* Blanc cassé */
-    color: #333;            /* Texte foncé */
-  }
-  
-  /* Thème sombre */
-  body.profile-edit-page.theme-dark {
-    background-color: #1F1F1F; /* Gris anthracite */
-    color: #F5F5F5;            /* Texte clair */
-  }
+
   
   /* Conteneur principal */
   .profile-edit-container {
@@ -1324,12 +771,10 @@ body.profile-edit-page {
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    color:black;
   }
   
-  body.profile-edit-page.theme-dark .profile-edit-container {
-    background-color: #2A2A2A;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  }
+
   
   /* Titre de la page */
   h1.profile-edit-title {
@@ -1339,13 +784,7 @@ body.profile-edit-page {
     transition: color 0.3s ease;
   }
   
-  body.profile-edit-page.theme-light h1.profile-edit-title {
-    color: #333;
-  }
-  
-  body.profile-edit-page.theme-dark h1.profile-edit-title {
-    color: #F5F5F5;
-  }
+
   
   /* Groupes du formulaire (si nécessaire en cas de personnalisations) */
   .form-group {
@@ -1367,13 +806,9 @@ body.profile-edit-page {
     border-radius: 6px;
     font-size: 1rem;
     transition: border-color 0.3s ease, background-color 0.3s ease;
+    color: back;
   }
-  
-  body.profile-edit-page.theme-dark .form-control {
-    background-color: #333;
-    border-color: #444;
-    color: #fff;
-  }
+
   
   /* Bouton de soumission */
   button[type="submit"] {
@@ -1393,11 +828,4 @@ body.profile-edit-page {
     background-color: #0056b3;
     transform: scale(1.03);
   }
-  
-  body.profile-edit-page.theme-dark button[type="submit"] {
-    background-color: #0056b3;
-  }
-  
-  body.profile-edit-page.theme-dark button[type="submit"]:hover {
-    background-color: #003d80;
-  }
+

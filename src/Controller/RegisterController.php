@@ -77,8 +77,21 @@ class RegisterController extends AbstractController
             $user->setPoints(0);
             $user->setExperienceLevel("débutant");
 
+            
+
             // Définir le rôle par défaut à "ROLE_SIMPLE"
             $user->setRoles(['ROLE_SIMPLE']);
+
+            // Ajout de la validation dans le contrôleur ou dans le formulaire
+$today = new \DateTime();
+$minDate = new \DateTime('-18 years');
+if ($user->getBirthdate() > $minDate) {
+    $this->addFlash('error', 'Vous devez avoir au moins 18 ans pour vous inscrire.');
+    return $this->render('register.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
 
             // Enregistrer l'utilisateur dans la base de données
             $entityManager->persist($user);
