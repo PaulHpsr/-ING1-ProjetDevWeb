@@ -25,7 +25,7 @@ Les administrateurs bénéficient également d’un espace dédié pour :
 - Publier des actualités sur le bâtiment.
 - Consulter et exporter les statistiques du site.
 
-![Capture d'écran de la page d'accueil](demo/home Blanc.png)
+![Capture d'écran de la page d'accueil](demo/home.PNG)
 
 ## Fonctionnalités
 
@@ -63,7 +63,7 @@ Les administrateurs bénéficient également d’un espace dédié pour :
    - Recherchez d'autres utilisateurs.
    - Profitez d'un système de points pour débloquer de nouvelles fonctionnalités.
 
-   ![Recherche d'utilisateurs](demo/Recherche.png)
+   ![Recherche d'utilisateurs](demo/Recherche.PNG)
 
 3. **Suivi Énergétique**
    - Visualisez, via des rapports interactifs, la consommation énergétique du bâtiment et les économies réalisées.
