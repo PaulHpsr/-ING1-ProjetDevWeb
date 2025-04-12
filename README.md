@@ -78,7 +78,7 @@ Les administrateurs bénéficient également d’un espace dédié pour :
   ```dotenv
   email : admin@gmail.com
   mot de passe : admin123
-```
+
 ## Installation
 
 ### 1. Télécharger le Projet
