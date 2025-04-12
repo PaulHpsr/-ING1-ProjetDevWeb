@@ -1,7 +1,5 @@
 # Plateforme IoT pour Bâtiments Intelligents
 
-![Capture d'écran de la page d'accueil](demo/accueil.png)
-
 Bienvenue sur notre projet de **Plateforme IoT pour Bâtiments Intelligents** !  
 Développé avec le framework Symfony, ce site centralise et gère divers services pour améliorer la gestion et l'efficacité énergétique des bâtiments intelligents.
 
@@ -27,7 +25,7 @@ Les administrateurs bénéficient également d’un espace dédié pour :
 - Publier des actualités sur le bâtiment.
 - Consulter et exporter les statistiques du site.
 
-![Vue d'ensemble du dashboard](demo/home.png)
+![Capture d'écran de la page d'accueil](demo/home Blanc.png)
 
 ## Fonctionnalités
 
@@ -39,6 +37,7 @@ Les administrateurs bénéficient également d’un espace dédié pour :
 
 - **Personnalisation**  
   Adaptez l'apparence du site selon vos préférences grâce aux options de personnalisation.
+  ![Capture d'écran de la page d'accueil](demo/demo.gif)
 
 - **Suivi Énergétique**  
   Analysez la consommation énergétique et les économies réalisées via des graphiques et rapports détaillés.
@@ -69,7 +68,6 @@ Les administrateurs bénéficient également d’un espace dédié pour :
 3. **Suivi Énergétique**
    - Visualisez, via des rapports interactifs, la consommation énergétique du bâtiment et les économies réalisées.
 
-   ![Tableau de bord énergétique](demo/dashboard.png)
 
 ### Mode Super-utilisateur
 
@@ -118,7 +116,7 @@ Pour faire fonctionner le projet, vous devez installer :
   DATABASE_URL="mysql://votreIdentifiant:votreMotDePasse@127.0.0.1:3306/iot_plateforme?serverVersion=5.7"
 
 
-![Texte alternatif](demo/configData.png)
+
 
 ### 4. **Configurer la Messagerie Automatisée**:
 Le projet peut envoyer automatiquement des e-mails (pour la confirmation d'inscription, par exemple).
@@ -129,7 +127,6 @@ Le projet peut envoyer automatiquement des e-mails (pour la confirmation d'inscr
       ```dotenv
       MAILER_DSN=smtp://VotreEmail@gmail.com:VotreMotDePasseApp@smtp.gmail.com:587?encryption=tls&auth_mode=login
       
-    ![Texte alternatif](demo/configMailer.png)
     
 ### 5. **Mettre à Jour la Base de Données et Créer l'Utilisateur Administrateur**:
    Pour préparer la base de données et créer automatiquement un compte administrateur (de gestion), procédez ainsi :
