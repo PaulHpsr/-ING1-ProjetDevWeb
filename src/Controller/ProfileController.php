@@ -22,7 +22,7 @@ class ProfileController extends AbstractController
         // Récupérer l'utilisateur actuellement connecté
         $user = $this->getUser();
 
-        // Si aucun utilisateur n'est connecté, lever une exception
+        // Si aucun utilisateur n'est connecte -> exception
         if (!$user) {
             throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à votre profil.');
         }
@@ -47,7 +47,7 @@ public function edit(Request $request, EntityManagerInterface $entityManager, Us
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        // Récupérer le mot de passe en clair depuis le champ non mappé
+        // Recup le mot de passe de base
         $plainPassword = $form->get('plainPassword')->getData();
 
         // Si un nouveau mot de passe a été saisi, le hasher et le définir sur l'utilisateur

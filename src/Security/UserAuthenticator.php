@@ -28,14 +28,14 @@ class UserAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): bool
     {
-        // Exécute cet authenticator seulement sur la route app_login avec la méthode POST
+
         return $request->attributes->get('_route') === 'app_login'
             && $request->isMethod('POST');
     }
 
     public function authenticate(Request $request): Passport
     {
-        // Récupération des identifiants depuis le formulaire
+        
         $email     = $request->request->get('_username', '');
         $password  = $request->request->get('_password', '');
         $csrfToken = $request->request->get('_csrf_token');
@@ -47,7 +47,7 @@ class UserAuthenticator extends AbstractAuthenticator
             throw new AuthenticationException('Email and password must be provided. Email fourni : "' . $email . '" Mot de passe fourni : "' . $password . '"');
         }
 
-        // Création du Passport en chargeant l'utilisateur via le UserRepository
+        
         return new Passport(
             new UserBadge($email, function ($userIdentifier) {
                 $user = $this->userRepository->findOneBy(['email' => $userIdentifier]);
@@ -68,7 +68,7 @@ class UserAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        // Redirige vers la page de login en transmettant le message d'erreur
+        
         return new RedirectResponse($this->router->generate('app_login', [
             'error' => $exception->getMessage()
         ]));
@@ -76,7 +76,7 @@ class UserAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        // Redirige vers la page d'accueil après authentification réussie
+       
         return new RedirectResponse($this->router->generate('app_home'));
     }
 }

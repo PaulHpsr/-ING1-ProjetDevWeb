@@ -16,7 +16,7 @@ class ReportController extends AbstractController
     #[Route('/report/{id}', name: 'app_report_user', methods: ['POST'])]
     public function report(User $user, Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Récupérer la raison du signalement depuis les données POST
+
         $reason = $request->request->get('reason');
 
         if (empty($reason)) {
@@ -33,7 +33,7 @@ class ReportController extends AbstractController
         $entityManager->persist($signalement);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Signalement envoyé avec succès.');
+
 
         return $this->redirectToRoute('app_user_profile', ['id' => $user->getId()]);
     }

@@ -17,7 +17,7 @@ class SearchController extends AbstractController
     #[Route('/recherche', name: 'app_recherche')]
     public function search(Request $request, EntityManagerInterface $entityManager): Response
     {
-        // Récupérer la valeur de la recherche et le filtre depuis les paramètres GET
+        // Récupérer la valeur de la recherche et le filtre
         $searchTerm = trim($request->query->get('recherche', ''));
         $filter = $request->query->get('filter', '');
 
@@ -54,7 +54,7 @@ class SearchController extends AbstractController
                 break;
         }
 
-        // Afficher les résultats dans la vue dédiée
+
         return $this->render('search_results.html.twig', [
             'users'  => $users,
             'objets' => $objets,

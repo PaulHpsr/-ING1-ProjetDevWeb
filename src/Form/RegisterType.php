@@ -33,7 +33,7 @@ class RegisterType extends AbstractType
                         'maxMessage' => 'Le pseudo ne peut pas dépasser {{ limit }} caractères.',
                     ]),
                     new Assert\Regex([
-                        'pattern' => '/^[a-zA-Z0-9_]+$/', // Seulement lettres, chiffres et underscore
+                        'pattern' => '/^[a-zA-Z0-9_]+$/', // Seulement lettres, chiffres
                         'message' => 'Le pseudo ne doit contenir que des lettres, des chiffres ou des underscores.',
                     ])
                 ]
@@ -92,9 +92,9 @@ class RegisterType extends AbstractType
                 'constraints' => [new Assert\NotBlank()],
             ])
             ->add('profilePicture', FileType::class, [
-                'required' => false,  // Optionnel
+                'required' => false,  
                 'label'    => 'Photo de profil (optionnel)', 
-                'mapped'   => false,   // Ne lie pas ce champ directement à l'entité User
+                'mapped'   => false,   
                 'attr'     => ['accept' => 'image/*'],
                 'constraints' => [
                     new File([

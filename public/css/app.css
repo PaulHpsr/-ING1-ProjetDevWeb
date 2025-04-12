@@ -270,14 +270,19 @@ body.theme-dark .navigation-bar .bouton-admin {
 
 /* Boîte de filtre */
 #filter-box {
-    margin-left: 1rem;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    background-color: #fff;
-    color: black;
+  appearance: none; 
+  border: 1px solid #ccc;
+  margin-left: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  padding: 0.5em 1em;
+  background-color: #fff;
+  color: inherit;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: black;
 }
+
 
 
 /* Bouton de recherche */
@@ -771,7 +776,7 @@ body.home-page.theme-dark .aucune-actualite {
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    color:black;
+    color: black;
   }
   
 

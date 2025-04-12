@@ -71,7 +71,7 @@ class InfosType extends AbstractType
             ->add('publisher', EntityType::class, [
                 'label' => 'Publié par',
                 'class' => User::class,
-                'choice_label' => 'email', // Changez par une autre propriété comme `username` si nécessaire
+                'choice_label' => 'email', 
                 'attr' => [
                     'class' => 'form-control',
                 ],

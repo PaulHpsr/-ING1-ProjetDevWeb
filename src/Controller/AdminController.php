@@ -18,11 +18,11 @@ use App\Repository\SignalementRepository;
 
 class AdminController extends AbstractController
 {
-    // Afficher la liste des utilisateurs
+    // afficher les users
     #[Route('/admin/utilisateurs', name: 'admin_users')]
     public function listUsers(EntityManagerInterface $entityManager): Response
     {
-        // Récupérer tous les utilisateurs
+        // recup les utilisateurs
         $users = $entityManager->getRepository(User::class)->findAll();
 
         return $this->render('admin/user_list.html.twig', [
@@ -34,30 +34,28 @@ class AdminController extends AbstractController
     #[Route('/admin/bannir/{id}', name: 'admin_ban_user', methods: ['POST'])]
     public function banUser(User $user, EntityManagerInterface $entityManager, SignalementRepository $signalementRepository): Response
     {
-        // Supprimez tous les signalements liés à cet utilisateur
+        // supp les signalements
         $signalements = $signalementRepository->findBy(['reportedUser' => $user]);
         
         foreach ($signalements as $signalement) {
             $entityManager->remove($signalement);
         }
         
-        // Supprimer l'utilisateur
+        // delete l'utilisateur
         $entityManager->remove($user);
         $entityManager->flush();
     
-        // Message de succès
-        $this->addFlash('success', 'Utilisateur banni et ses signalements supprimés avec succès !');
     
         return $this->redirectToRoute('admin_users');
     }
     
     
 
-    // Afficher la liste des signalements
+    //Liste signalement
     #[Route('/admin/signalements', name: 'admin_signalements')]
     public function listSignalements(EntityManagerInterface $entityManager): Response
     {
-        // Récupérer tous les signalements de la base de données
+
         $signalements = $entityManager->getRepository(Signalement::class)->findAll();
 
         return $this->render('admin/list_signalements.html.twig', [
@@ -65,18 +63,17 @@ class AdminController extends AbstractController
         ]);
     }
 
-    // Supprimer un signalement
+    // supp un signalement
     #[Route('/admin/signalement/supprimer/{id}', name: 'admin_supprimer_signalement')]
     public function deleteSignalement(Signalement $signalement, EntityManagerInterface $entityManager): Response
     {
-        // Supprimer le signalement de la base de données
+
         $entityManager->remove($signalement);
         $entityManager->flush();
 
-        // Afficher un message flash
-        $this->addFlash('success', 'Signalement supprimé avec succès.');
 
-        // Rediriger vers la liste des signalements
+
+
         return $this->redirectToRoute('admin_signalements');
     }
 
@@ -88,13 +85,12 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin_verification');
         }
 
-        // Mise à jour du statut de l'utilisateur
+
         $user->setStatus('active');
         $entityManager->persist($user);
         $entityManager->flush();
 
-        // Message flash de succès
-        $this->addFlash('success', 'Utilisateur validé avec succès.');
+
 
         return $this->redirectToRoute('admin_verification');
     }

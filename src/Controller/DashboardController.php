@@ -39,7 +39,8 @@ class DashboardController extends AbstractController
         $disconnectedData = $qbDisconnected->getQuery()->getOneOrNullResult();
         
         $disconnectedCount = $disconnectedData['disconnectedCount'] ?? 0;
-        // si aucun enregistrement, SUM pourra retourner null, on force donc 0
+
+        // si aucun enregistrement -> 0
         $disconnectedConsumption = $disconnectedData['disconnectedConsumption'] ?? 0;
 
 
@@ -47,8 +48,8 @@ class DashboardController extends AbstractController
     $user = $this->getUser();
 
     if ($user && $user->getPoints() < 10) {
-        // Ajout de 1 point pour visiter cette page
-     $user->setPoints($user->getPoints() + 1);
+        // Ajout de 0.25 point pour visiter cette page
+     $user->setPoints($user->getPoints() + 0.25);
 
      // Utiliser l'EntityManager correctement
      $entityManager->persist($user);

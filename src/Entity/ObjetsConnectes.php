@@ -34,7 +34,7 @@ class ObjetsConnectes
     private ?float $consommationEnergetique = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $connectivite = null; // Connectivité (Wi-Fi, Bluetooth, Zigbee, etc.)
+    private ?string $connectivite = null; // Connectivité (Wi-Fi, Bluetooth,  etc.)
 
     #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTimeInterface $derniereInteraction = null; // Dernière interaction

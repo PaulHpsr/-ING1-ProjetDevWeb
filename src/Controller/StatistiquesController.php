@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class StatistiquesController extends AbstractController
 {
-    // Page principale des statistiques pour les admins
+    
     #[Route('/admin/statistiques', name: 'admin_statistiques')]
     public function statistiques(EntityManagerInterface $entityManager): Response
     {
@@ -32,7 +32,7 @@ class StatistiquesController extends AbstractController
             ->getQuery()
             ->getSingleScalarResult();
 
-        // Statistiques des connexions des utilisateurs (par exemple, taux de connexion)
+
         $tauxConnexion = $this->getTauxConnexion($entityManager);
 
         return $this->render('admin/statistiques.html.twig', [
@@ -44,7 +44,7 @@ class StatistiquesController extends AbstractController
         ]);
     }
 
-    // Fonction pour obtenir le taux de connexion des utilisateurs
+    
     private function getTauxConnexion(EntityManagerInterface $entityManager): float
     {
         $connectedUsers = $entityManager->getRepository(User::class)->findBy(['status' => 'active']);
@@ -93,7 +93,6 @@ public function exportCSV(EntityManagerInterface $entityManager): Response
         );
     }
 
-    // Préparer la réponse
     $response = new Response($csvContent);
     $response->headers->set('Content-Type', 'text/csv');
     $response->headers->set('Content-Disposition', 'attachment; filename="rapport_utilisateurs.csv"');
@@ -105,7 +104,7 @@ public function exportCSV(EntityManagerInterface $entityManager): Response
 #[Route('/admin/statistiques/export-pdf', name: 'admin_export_pdf')]
 public function exportPDF(EntityManagerInterface $entityManager): Response
 {
-    // Instancier Dompdf
+
     $dompdf = new Dompdf();
 
     // Récupérer les utilisateurs et les statistiques
@@ -120,7 +119,7 @@ public function exportPDF(EntityManagerInterface $entityManager): Response
         ->getSingleScalarResult();
     $tauxConnexion = $this->getTauxConnexion($entityManager);
 
-    // Construire le contenu HTML pour le PDF
+
     $html = '<h1>Rapport des utilisateurs</h1>';
     $html .= '<h2>Statistiques</h2>';
     $html .= sprintf(
@@ -148,14 +147,14 @@ public function exportPDF(EntityManagerInterface $entityManager): Response
         );
     }
 
-    // Charger le contenu HTML dans Dompdf
+
     $dompdf->loadHtml($html);
 
-    // Configurer les options de Dompdf
+
     $dompdf->setPaper('A4', 'portrait');
     $dompdf->render();
 
-    // Préparer la réponse
+
     $response = new Response($dompdf->output());
     $response->headers->set('Content-Type', 'application/pdf');
     $response->headers->set('Content-Disposition', 'attachment; filename="rapport_utilisateurs.pdf"');

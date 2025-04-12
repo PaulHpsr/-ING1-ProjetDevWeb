@@ -20,12 +20,12 @@ class UserFixtures extends Fixture
     {
         // Création d'un utilisateur administrateur
         $adminUser = new User();
-        $adminUser->setUsername('admin');
-        $adminUser->setEmail('tarckeno@gmail.com');
+        $adminUser->setUsername('Admin');
+        $adminUser->setEmail('hopsorepaul@gmail.com');
         $adminUser->setFirstName('Admin');
         $adminUser->setLastName('User');
         $adminUser->setSex('autre');
-        $adminUser->setBirthdate(new \DateTime('1990-01-01'));
+        $adminUser->setBirthdate(new \DateTime('2004-01-01'));
         $adminUser->setMemberType('Administrateur');
         $adminUser->setPoints(10); // Donne le niveau "expert"
         $adminUser->setRoles(['ROLE_ADMIN']);
@@ -35,10 +35,8 @@ class UserFixtures extends Fixture
         $hashedPassword = $this->passwordHasher->hashPassword($adminUser, 'admin123');
         $adminUser->setPassword($hashedPassword);
 
-        // Persistance en base de données
-        $manager->persist($adminUser);
 
-        // Enregistrement des changements dans la base
+        $manager->persist($adminUser);
         $manager->flush();
 
         echo "Utilisateur admin créé avec succès.\n";

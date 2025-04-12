@@ -97,8 +97,7 @@ if ($user->getBirthdate() > $minDate) {
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Afficher un message de succès
-            $this->addFlash('success', 'Votre inscription a bien été enregistrée, en attente de validation.');
+
 
             // Envoyer un email à l'utilisateur pour confirmer son inscription
             $emailService->sendEmail(

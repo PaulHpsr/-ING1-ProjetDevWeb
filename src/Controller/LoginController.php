@@ -18,7 +18,7 @@ class LoginController extends AbstractController
         // Dernier email saisi par l'utilisateur
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        // Rendre la vue
+
         return $this->render('login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,

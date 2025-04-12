@@ -9,7 +9,7 @@
         <!-- Barre de recherche -->
         <form action="{{ path('app_recherche') }}" method="get" style="display: flex; align-items: center; flex-grow: 1;">
             <input type="text" id="search-box" name="recherche" placeholder="Chercher">
-            <select blackid="filter-box" name="filter">
+            <select id="filter-box" name="filter">
                 <option value="none">Sans filtre</option>
                 <option value="user">Utilisateur</option>
                 <option value="objet">Objet connecté</option>
