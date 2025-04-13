@@ -167,5 +167,6 @@ Membres de l'équipe (CY TECH ING1 GMF4) :
 - TISSOT Pierre-Emmanuel - [peertis460@gmail.com](mailto:peertis460@gmail.com)
 - CISSE Flavie -  [flavie.cisse1@gmail.com](mailto:flavie.cisse1@gmail.com)
 - MORITZ CIRCE -  [moritzcir@cy-tech.fr](mailto:moritzcir@cy-tech.fr)
+- ERNANDEZ MAXIME - [ernandezcmax@cy-tech.fr](mailto:ernandezcmax@cy-tech.fr)
 - HOPSORE Paul -  [hopsorepaul@gmail.com](mailto:hopsorepaul@gmail.com)
 
