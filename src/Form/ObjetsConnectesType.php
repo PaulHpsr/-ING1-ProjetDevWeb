@@ -28,10 +28,11 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
             'attr'  => ['class' => 'form-control', 'placeholder' => 'Nom'],
             'constraints' => [
                 new Assert\NotBlank(['message' => 'Le nom de l\'objet ne peut pas être vide.']),
-                new Assert\Range([
+                new Assert\Length([
                     'min' => 3,
                     'max' => 50,
-                    'notInRangeMessage' => 'Le nom de l\'objet doit contenir entre {{ min }} et {{ max }} caractères.'
+                    'minMessage' => 'Le nom de l\'objet doit contenir au moins {{ limit }} caractères.',
+                    'maxMessage' => 'Le nom de l\'objet doit contenir au maximum {{ limit }} caractères.',
                 ]),
                 new Assert\Regex([
                     'pattern' => '/^[a-zA-Z0-9\s\-]+$/', // Limite aux lettres, chiffres, espaces et tirets
@@ -58,10 +59,11 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
             'attr'  => ['class' => 'form-control', 'placeholder' => 'Marque'],
             'constraints' => [
                 new Assert\NotBlank(['message' => 'Le champ marque ne peut pas être vide.']),
-                new Assert\Range([
+                new Assert\Length([
                     'min' => 2,
                     'max' => 50,
-                    'notInRangeMessage' => 'La marque doit contenir entre {{ min }} et {{ max }} caractères.'
+                    'minMessage' => 'Le nom de la marque doit contenir au moins {{ limit }} caractères.',
+                    'maxMessage' => 'Le nom de la marque doit contenir au maximum {{ limit }} caractères.',
                 ]),
                 new Assert\Regex([
                     'pattern' => '/^[a-zA-Z0-9\s\-]+$/', // Limite aux lettres, chiffres, espaces et tirets
