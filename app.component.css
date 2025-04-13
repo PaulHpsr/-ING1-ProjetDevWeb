@@ -1,0 +1,186 @@
+erhtml {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: 'Poppins', 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0 40px; /* Padding horizontal pour le corps */
+}
+
+/* Styles des titres */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Dancing Script', cursive;
+    font-weight: 700;
+}
+
+/* Styles des boutons */
+.login-button, .employee-login-button, .bouton {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+/* Styles de l'en-tête */
+header {
+    background-color: #f0f0f0;
+    padding: 20px 0;
+    width: 100%;
+    margin: 0 -40px;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Réduction du padding à 20px */
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+header nav ul li {
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+header .logo-container {
+    display: flex;
+    align-items: center;
+   
+}
+
+header .logo-header {
+    width: 80px; /* Increased from 50px to make it bigger */
+    height: 80px; /* Added height to maintain aspect ratio */
+    margin-right: 10px; /* Increased margin for better spacing */
+    border-radius: 50%; /* Makes the logo round */
+    object-fit: cover; /* Ensures the image covers the area properly */ /* Réduction de la marge à 1px */
+}
+
+/* Styles du logo */
+.logo {
+    width: 200px;
+}
+
+/* Styles de l'arrière-plan */
+.background {
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styles des sections */
+section {
+    padding: 50px 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.info {
+    text-align: center;
+}
+
+/* Styles des boutons généraux */
+.bouton {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+/* Styles des services */
+.services-container, .menu-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.service-item, .menu-item {
+    width: 300px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.menu-item {
+    width: 200px;
+}
+
+/* Styles des actualités */
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.news-item {
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+/* Styles du formulaire de contact */
+.contact form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.contact input, .contact textarea {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+}
+
+.contact button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+}
+
+/* Styles du pied de page */
+footer {
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 20px 40px;
+    margin: 0 -40px;
+}
+
+/* Styles spécifiques des boutons de connexion */
+.login-button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.employee-login-button {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-left: 10px;
+}

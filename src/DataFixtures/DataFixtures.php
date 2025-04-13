@@ -21,7 +21,7 @@ class UserFixtures extends Fixture
         // Création d'un utilisateur administrateur
         $adminUser = new User();
         $adminUser->setUsername('Admin');
-        $adminUser->setEmail('hopsorepaul@gmail.com');
+        $adminUser->setEmail('admin@gmail.com');
         $adminUser->setFirstName('Admin');
         $adminUser->setLastName('User');
         $adminUser->setSex('autre');
