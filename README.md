@@ -160,5 +160,12 @@ Le projet peut envoyer automatiquement des e-mails (pour la confirmation d'inscr
     ```
 - Accéder au Site Ouvrez votre navigateur internet (comme Chrome, Firefox ou Edge) et allez à l'adresse http://127.0.0.1:8000. Vous devriez voir la page d'accueil du projet.
 
-    
+## Contact
+
+Membres de l'équipe (CY TECH ING1 GMF4) :
+
+- TISSOT Pierre-Emmanuel - [peertis460@gmail.com](mailto:peertis460@gmail.com)
+- CISSE Flavie -  [flavie.cisse1@gmail.com](mailto:flavie.cisse1@gmail.com)
+- MORITZ CIRCE -  [moritzcir@cy-tech.fr](mailto:moritzcir@cy-tech.fr)
+- HOPSORE Paul -  [hopsorepaul@gmail.com](mailto:hopsorepaul@gmail.com)
 
