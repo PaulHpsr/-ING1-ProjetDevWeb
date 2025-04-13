@@ -18,31 +18,47 @@ class StatistiquesController extends AbstractController
 {
     
     #[Route('/admin/statistiques', name: 'admin_statistiques')]
-    public function statistiques(EntityManagerInterface $entityManager): Response
-    {
-        // Récupérer des données pour les rapports
-        $totalUsers = $entityManager->getRepository(User::class)->count([]);
-        $totalObjets = $entityManager->getRepository(ObjetsConnectes::class)->count([]);
-        $totalSignalements = $entityManager->getRepository(Signalement::class)->count([]);
+public function statistiques(EntityManagerInterface $entityManager): Response
+{
+    // Récupérer des données pour les rapports
+    $totalUsers = $entityManager->getRepository(User::class)->count([]);
+    $totalObjets = $entityManager->getRepository(ObjetsConnectes::class)->count([]);
+    $totalSignalements = $entityManager->getRepository(Signalement::class)->count([]);
 
-        // Consommation énergétique totale
-        $totalConsommationEnerg = $entityManager->getRepository(ObjetsConnectes::class)
-            ->createQueryBuilder('o')
-            ->select('SUM(o.consommationEnergetique)')
-            ->getQuery()
-            ->getSingleScalarResult();
+    // Calculer la consommation énergétique totale pour les objets dont l'état n'est pas "déconnecté"
+    $qb = $entityManager->createQueryBuilder();
+    $totalConsommationEnerg = $qb->select('SUM(o.consommationEnergetique) as totalConsumption')
+        ->from(ObjetsConnectes::class, 'o')
+        ->where('o.etat != :etat')
+        ->setParameter('etat', 'déconnecté')
+        ->getQuery()
+        ->getSingleScalarResult();
 
+    // Calculer le nombre et la consommation énergétique des objets "déconnectés"
+    $qbDisconnected = $entityManager->createQueryBuilder();
+    $disconnectedData = $qbDisconnected->select('COUNT(o) as disconnectedCount, SUM(o.consommationEnergetique) as disconnectedConsumption')
+        ->from(ObjetsConnectes::class, 'o')
+        ->where('o.etat = :etat')
+        ->setParameter('etat', 'déconnecté')
+        ->getQuery()
+        ->getSingleResult();
 
-        $tauxConnexion = $this->getTauxConnexion($entityManager);
+    $disconnectedCount = $disconnectedData['disconnectedCount'] ?? 0;
+    $disconnectedConsumption = $disconnectedData['disconnectedConsumption'] ?? 0;
 
-        return $this->render('admin/statistiques.html.twig', [
-            'totalUsers'              => $totalUsers,
-            'totalObjets'             => $totalObjets,
-            'totalSignalements'       => $totalSignalements,
-            'totalConsommationEnerg'  => $totalConsommationEnerg,
-            'tauxConnexion'           => $tauxConnexion,
-        ]);
-    }
+    $tauxConnexion = $this->getTauxConnexion($entityManager);
+
+    return $this->render('admin/statistiques.html.twig', [
+        'totalUsers'              => $totalUsers,
+        'totalObjets'             => $totalObjets,
+        'totalSignalements'       => $totalSignalements,
+        'totalConsommationEnerg'  => $totalConsommationEnerg,
+        'disconnectedCount'       => $disconnectedCount,
+        'disconnectedConsumption' => $disconnectedConsumption,
+        'tauxConnexion'           => $tauxConnexion,
+    ]);
+}
+
 
     
     private function getTauxConnexion(EntityManagerInterface $entityManager): float
@@ -57,26 +73,46 @@ class StatistiquesController extends AbstractController
 #[Route('/admin/statistiques/export-csv', name: 'admin_export_csv')]
 public function exportCSV(EntityManagerInterface $entityManager): Response
 {
-    // Récupérer les utilisateurs et les statistiques
+    // Récupérer les utilisateurs et les compteurs de base
     $users = $entityManager->getRepository(User::class)->findAll();
     $totalUsers = $entityManager->getRepository(User::class)->count([]);
     $totalObjets = $entityManager->getRepository(ObjetsConnectes::class)->count([]);
     $totalSignalements = $entityManager->getRepository(Signalement::class)->count([]);
-    $totalConsommationEnerg = $entityManager->getRepository(ObjetsConnectes::class)
-        ->createQueryBuilder('o')
-        ->select('SUM(o.consommationEnergetique)')
+
+    // Calculer la consommation énergétique totale pour les objets dont l'état n'est pas "déconnecté"
+    $qb = $entityManager->createQueryBuilder();
+    $totalConsommationEnerg = $qb->select('SUM(o.consommationEnergetique) as totalConsumption')
+        ->from(ObjetsConnectes::class, 'o')
+        ->where('o.etat != :etat')
+        ->setParameter('etat', 'déconnecté')
         ->getQuery()
         ->getSingleScalarResult();
+
+    // Calculer le nombre et la consommation énergétique des objets "déconnectés"
+    $qbDisconnected = $entityManager->createQueryBuilder();
+    $disconnectedData = $qbDisconnected->select('COUNT(o) as disconnectedCount, SUM(o.consommationEnergetique) as disconnectedConsumption')
+        ->from(ObjetsConnectes::class, 'o')
+        ->where('o.etat = :etat')
+        ->setParameter('etat', 'déconnecté')
+        ->getQuery()
+        ->getSingleResult();
+
+    $disconnectedCount = $disconnectedData['disconnectedCount'] ?? 0;
+    $disconnectedConsumption = $disconnectedData['disconnectedConsumption'] ?? 0;
+
+    // Exemple d'appel à une méthode pour calculer le taux de connexion
     $tauxConnexion = $this->getTauxConnexion($entityManager);
 
-    // Générer les statistiques dans le fichier CSV
+    // Générer le contenu du fichier CSV
     $csvContent = "Statistique, Valeur\n";
     $csvContent .= sprintf(
-        "Total utilisateurs,%d\nTotal objets,%d\nTotal signalements,%d\nTotal consommation énergétique,%.2f\nTaux de connexion,%s\n\n",
+        "Total utilisateurs,%d\nTotal objets,%d\nTotal signalements,%d\nTotal consommation énergétique,%.2f\nTotal objets déconnectés,%d\nTotal consommation énergétique économisée,%.2f\nTaux de connexion,%s\n\n",
         $totalUsers,
         $totalObjets,
         $totalSignalements,
         $totalConsommationEnerg,
+        $disconnectedCount,
+        $disconnectedConsumption,
         $tauxConnexion
     );
 
@@ -100,6 +136,7 @@ public function exportCSV(EntityManagerInterface $entityManager): Response
     return $response;
 }
 
+
 // Exporter les rapports en PDF
 #[Route('/admin/statistiques/export-pdf', name: 'admin_export_pdf')]
 public function exportPDF(EntityManagerInterface $entityManager): Response
@@ -112,11 +149,26 @@ public function exportPDF(EntityManagerInterface $entityManager): Response
     $totalUsers = $entityManager->getRepository(User::class)->count([]);
     $totalObjets = $entityManager->getRepository(ObjetsConnectes::class)->count([]);
     $totalSignalements = $entityManager->getRepository(Signalement::class)->count([]);
-    $totalConsommationEnerg = $entityManager->getRepository(ObjetsConnectes::class)
-        ->createQueryBuilder('o')
-        ->select('SUM(o.consommationEnergetique)')
+    // Calculer la consommation énergétique totale pour les objets dont l'état n'est pas "déconnecté"
+    $qb = $entityManager->createQueryBuilder();
+    $totalConsommationEnerg = $qb->select('SUM(o.consommationEnergetique) as totalConsumption')
+        ->from(ObjetsConnectes::class, 'o')
+        ->where('o.etat != :etat')
+        ->setParameter('etat', 'déconnecté')
         ->getQuery()
         ->getSingleScalarResult();
+
+    // Calculer le nombre et la consommation énergétique des objets "déconnectés"
+    $qbDisconnected = $entityManager->createQueryBuilder();
+    $disconnectedData = $qbDisconnected->select('COUNT(o) as disconnectedCount, SUM(o.consommationEnergetique) as disconnectedConsumption')
+        ->from(ObjetsConnectes::class, 'o')
+        ->where('o.etat = :etat')
+        ->setParameter('etat', 'déconnecté')
+        ->getQuery()
+        ->getSingleResult();
+
+    $disconnectedCount = $disconnectedData['disconnectedCount'] ?? 0;
+    $disconnectedConsumption = $disconnectedData['disconnectedConsumption'] ?? 0;
     $tauxConnexion = $this->getTauxConnexion($entityManager);
 
 
@@ -127,11 +179,15 @@ public function exportPDF(EntityManagerInterface $entityManager): Response
         <p>Total objets : %d</p>
         <p>Total signalements : %d</p>
         <p>Total consommation énergétique : %.2f kWh</p>
+        <p>Total objets déconnectés : %.2f kWh</p>
+        <p>Total consommation énergétique économisée: %.2f kWh</p>
         <p>Taux de connexion : %s</p>",
         $totalUsers,
         $totalObjets,
         $totalSignalements,
         $totalConsommationEnerg,
+        $disconnectedCount,
+        $disconnectedConsumption,
         $tauxConnexion
     );
 
