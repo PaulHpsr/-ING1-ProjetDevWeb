@@ -137,6 +137,7 @@ Le projet peut envoyer automatiquement des e-mails (pour la confirmation d'inscr
      
    - **Lancer les Migrations** Exécutez ensuite :
      ```dotenv
+     php bin/console doctrine:migrations:diff
      php bin/console doctrine:migrations:migrate
 
    Ces commandes vont configurer votre base de données et créer les tables nécessaires, y compris un utilisateur administrateur.
