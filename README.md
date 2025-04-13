@@ -54,10 +54,11 @@ Les administrateurs bénéficient également d’un espace dédié pour :
 ### Expérience Utilisateur
 
 1. **Création d'un Compte**
+   - Faire un "Free tour" du site web.
    - Inscrivez-vous en fournissant vos informations de base (nom, email, mot de passe, etc.).
    - Complétez votre profil avec des informations supplémentaires, comme une photo de profil.
 
-2. **Navigation et Gestion des Objets**
+3. **Navigation et Gestion des Objets**
    - Accédez aux modules pour consulter et modifier les objets connectés.
    - Personnalisez l'apparence de l'interface selon vos préférences.
    - Recherchez d'autres utilisateurs.
@@ -65,7 +66,7 @@ Les administrateurs bénéficient également d’un espace dédié pour :
 
    ![Recherche d'utilisateurs](demo/Recherche.PNG)
 
-3. **Suivi Énergétique**
+4. **Suivi Énergétique**
    - Visualisez, via des rapports interactifs, la consommation énergétique du bâtiment et les économies réalisées.
 
 
