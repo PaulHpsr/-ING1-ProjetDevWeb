@@ -50,7 +50,7 @@
     {% if user.profilePicture %}
         <img src="{{ asset('uploads/profiles/' ~ user.profilePicture) }}" alt="Photo de profil" class="profile-picture">
     {% else %}
-        <img src="{{ asset('images/default-profile.png') }}" alt="Photo de profil par défaut" class="profile-picture">
+        <img src="{{ asset('icones/black/profil.png') }}" alt="Photo de profil par défaut" class="profile-picture">
     {% endif %}
 
     <div class="profile-details">

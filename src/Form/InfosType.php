@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -57,27 +57,12 @@ class InfosType extends AbstractType
                     ])
                 ],
             ])
-            ->add('publishDate', DateTimeType::class, [
-                'label' => 'Date de publication',
+            ->add('publishDate', DateType::class, [
                 'widget' => 'single_text',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'La date de publication ne peut pas être vide.']),
-                    new Assert\DateTime(['message' => 'Veuillez entrer une date valide.'])
-                ],
+                'disabled' => true,
             ])
-            ->add('publisher', EntityType::class, [
-                'label' => 'Publié par',
-                'class' => User::class,
-                'choice_label' => 'email', 
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le champ "Publié par" est obligatoire.']),
-                ]
+            ->add('publisher', TextType::class, [
+                'disabled' => true,
             ])
             ->add('imagePath', FileType::class, [
                 'label'    => 'Image (PNG, JPG, JPEG, GIF)',

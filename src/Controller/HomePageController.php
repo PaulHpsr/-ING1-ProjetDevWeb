@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomePageController extends AbstractController
 {
-    #[Route('/home', name: 'app_home')]
+    #[Route('/', name: 'app_home')]
 public function index(Request $request, InfosRepository $infosRepository): Response
 {
     // Récupérer toutes les informations disponibles, triées par date de publication décroissante

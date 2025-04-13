@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255)]
     private ?string $memberType = null;  // Type de membre (développeur, testeur, etc.)
 
-    #[ORM\Column(type: "string", nullable: true, options: ["default" => "icones/black/profil.png"])]
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $profilePicture = null;  // URL de la photo de profil
 
     // Système de points
@@ -171,6 +171,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->username = $username;
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getUsername();
     }
 
     public function getAge(): ?int

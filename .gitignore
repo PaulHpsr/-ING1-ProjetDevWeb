@@ -7,4 +7,8 @@
 /public/bundles/
 /var/
 /vendor/
+/.env/
+/router/
+/userRepository/
+
 ###< symfony/framework-bundle ###

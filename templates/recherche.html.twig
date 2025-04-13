@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recherche | CY Entreprise{% endblock %}
+{% block title %}Recherche | Bank Connect{% endblock %}
 
 {% block body %}
     {% include 'template.html.twig' %}
@@ -16,13 +16,17 @@
                 <option value="infos">Infos</option>
             </select>
             <button id="button-box" type="submit">
-                <img src="{{ asset(app.user.color == 1 ? 'icones/black/026-search.png' : 'icones/black/026-search.png') }}" alt="Chercher">
+                <img src="{{ asset('icones/black/026-search.png') }}" alt="Chercher">
             </button>
         </form>
 
         <!-- Bouton de changement de thème -->
         <button id="theme-toggle" type="button" onclick="toggleTheme()">
+        {% if app.user is not null %}
             <img id="theme-icon" src="{{ asset(app.user.color == 1 ? 'icones/black/sun.png' : 'icones/white/moon.png') }}" alt="Changer de thème">
+        {% else %}
+            <img id="theme-icon" src="{{ asset('icones/black/sun.png') }}" alt="Changer de thème">
+        {% endif %}
         </button>
     </header>
 

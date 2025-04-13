@@ -1,3 +1,4 @@
+{# templates/base.html.twig #}
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,51 +7,61 @@
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         {% block stylesheets %}{% endblock %}
     </head>
-    <body class="{{ app.user is not null and app.user.color == 0 ? 'theme-dark' : 'theme-light' }}">
+    {# Définir une variable themeClass : si un utilisateur est connecté, on utilise sa préférence sinon on fixe "theme-light" par défaut #}
+    {% set themeClass = app.user ? (app.user.color == 0 ? 'theme-dark' : 'theme-light') : 'theme-light' %}
+    <body class="{{ themeClass }}">
         {% block body %}{% endblock %}
+        
         {% block javascripts %}
-        <script>
+            <script>
+            function toggleTheme() {
+                console.log("toggleTheme appelé");
 
- function toggleTheme() {
-    console.log("toggleTheme appelé");
+                // Déterminer le thème actuel
+                const isCurrentlyDark = document.body.classList.contains('theme-dark');
+                const newTheme = isCurrentlyDark ? 'theme-light' : 'theme-dark';
 
-    // Déterminer le thème actuel
-    const isCurrentlyDark = document.body.classList.contains('theme-dark');
-    const newTheme = isCurrentlyDark ? 'theme-light' : 'theme-dark';
+                // Appliquer la nouvelle classe sur le body
+                document.body.classList.remove('theme-light', 'theme-dark');
+                document.body.classList.add(newTheme);
 
-    // Envoi AJAX pour mettre à jour le thème dans la base de données
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/update-theme', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-            console.log('Thème enregistré sur le serveur.');
+                // Pour l'icône du thème, si nécessaire
+                const themeIcon = document.getElementById('theme-icon');
+                if (themeIcon) {
+                    themeIcon.src = newTheme === 'theme-dark'
+                        ? "/icones/white/moon.png"
+                        : "/icones/black/sun.png";
+                }
 
-            // Vérifier si l'élément theme-icon existe avant de modifier son attribut
-            const themeIcon = document.getElementById('theme-icon');
-            if (themeIcon) {
-                themeIcon.src = newTheme === 'theme-dark'
-                    ? "/icones/white/moon.png"
-                    : "/icones/black/sun.png";
-            } 
-            
-            // Appliquer la nouvelle classe au body après avoir enregistré dans la base de données
-            document.body.classList.remove('theme-light', 'theme-dark');
-            document.body.classList.add(newTheme);
+                {% if app.user is not null %}
+                    // Si l'utilisateur est connecté, on met à jour la préférence en base via AJAX
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/update-theme', true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                            console.log('Thème enregistré sur le serveur.');
+                        }
+                    };
+                    // On envoie 0 pour dark et 1 pour light (selon ta logique dans la BDD)
+                    xhr.send(JSON.stringify({ color: newTheme === 'theme-dark' ? 0 : 1 }));
+                {% else %}
+                    // Pour les utilisateurs non connectés, on peut stocker la préférence dans le localStorage
+                    localStorage.setItem('themePreference', newTheme);
+                {% endif %}
+            }
 
-
-            
-        }
-    };
-    xhr.send(JSON.stringify({ color: newTheme === 'theme-dark' ? 0 : 1 }));
-
-}
-
-
-
-
-</script>
-
+            // Si l'utilisateur n'est pas connecté, assure-toi que la préférence stockée (localStorage) soit appliquée dès le chargement
+            {% if app.user is null %}
+            document.addEventListener('DOMContentLoaded', function() {
+                const storedTheme = localStorage.getItem('themePreference');
+                if (storedTheme) {
+                    document.body.classList.remove('theme-light', 'theme-dark');
+                    document.body.classList.add(storedTheme);
+                }
+            });
+            {% endif %}
+            </script>
         {% endblock %}
     </body>
 </html>

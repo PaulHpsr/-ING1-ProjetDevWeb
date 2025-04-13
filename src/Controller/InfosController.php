@@ -4,12 +4,14 @@
 namespace App\Controller;
 
 use App\Entity\Infos;
+use App\Entity\User;
 use App\Form\InfosType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class InfosController extends AbstractController
 {
@@ -19,6 +21,13 @@ class InfosController extends AbstractController
         // Créer une nouvelle instance d'Infos
         $info = new Infos();
 
+        $info->setPublishDate(new \DateTime());
+
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+        if ($user) {
+        $info->setPublisher($user);
+        }
+
         // Créer le formulaire de création
         $form = $this->createForm(InfosType::class, $info);
 
@@ -26,6 +35,7 @@ class InfosController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
 
             // Gérer l'upload de la photo de profil
     $infoPictureFile = $form->get('imagePath')->getData();

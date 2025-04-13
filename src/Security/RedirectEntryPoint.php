@@ -13,7 +13,7 @@ class RedirectEntryPoint implements AuthenticationEntryPointInterface
 {
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
-        return new RedirectResponse('/landing');
+        return new RedirectResponse('/');
     }
 }
 

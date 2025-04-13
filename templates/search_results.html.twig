@@ -72,11 +72,12 @@
     <div class="search-results">
         {% for user in users %}
             <div class="result-card">
+            {% if app.user is not null %}
                 <a href="{{ path('app_user_profile', {'id': user.id}) }}">
                     {% if user.profilePicture %}
                         <img src="{{ asset('uploads/profiles/' ~ user.profilePicture) }}" alt="Photo de profil" class="profile-picture">
                     {% else %}
-                        <img src="{{ asset('images/default-profile.png') }}" alt="Photo de profil par défaut" class="profile-picture">
+                        <img src="{{ asset('icones/black/profil.png') }}" alt="Photo de profil par défaut" class="profile-picture">
                     {% endif %}
 
                     <div class="result-info">
@@ -85,6 +86,13 @@
                         <p>Niveau : {{ user.experienceLevel }}</p>
                     </div>
                 </a>
+            {% else %}
+             <a href="{{ path('app_landing') }}">
+             <div class="result-info">
+                <h3>Veuillez vous connecter afin d'avoir accès aux profils</h3>
+                </div>
+            </a>
+            {% endif %}
             </div>
         {% else %}
             <p class="text-muted">Aucun utilisateur trouvé.</p>

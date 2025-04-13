@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Page d'accueil | CY Entreprise{% endblock %}
+{% block title %}Page d'accueil | Bank Connect{% endblock %}
 
 {% block body %}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <div class="navigation-bar">
         <div class="logo">
-            <img id="logo-icon" src="{{ asset('icones/cacaboudin.jpg') }}" alt="Icône" class="image">
-            CY Entreprise
+            <img id="logo-icon" src="{{ asset('icones/logoBC.png') }}" alt="Icône" class="image">
+            Bank Connect
         </div>
 
         <div class="boutons">
@@ -24,21 +24,25 @@
                 <img id="icon-objets" src="{{ asset('icones/black/objets.png') }}" alt="Icône" class="image">
                 Objets connectés
             </a>
-            <a href="{{ path('app_profile') }}" class="bouton">
+            <a href="{{ app.user ? path('app_profile') : path('app_landing') }}" class="bouton">
                 <img id="icon-profil" src="{{ asset('icones/black/profil.png') }}" alt="Icône" class="image">
                 Profil
             </a>
-            <a href="{{ path('app_logout') }}" class="bouton" id="disconnect">
+            
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}" class="bouton" id="disconnect">
                 <img id="icon-exit" src="{{ asset('icones/black/exit.png') }}" alt="Icône" class="image">
                 Déconnexion
-            </a>
+                </a>
+            
+
             {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COMPLEX') %}
-                <a href="{{ path('app_dashboard') }}" class="bouton">
+                <a href="{{ path('app_dashboard')  }}" class="bouton">
                     <img id="icon-dashboard" src="{{ asset('icones/black/dashboard.png') }}" alt="Icône" class="image">
                     Dashboard
                 </a>
             {% endif %}
-            
+
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('admin_users') }}" class="bouton bouton-admin">
                     <img id="icon-admin-users" src="{{ asset('icones/black/008-message.png') }}" alt="Icône" class="image">
@@ -48,17 +52,17 @@
                     <img id="icon-admin-signalements" src="{{ asset('icones/black/043-warning.png') }}" alt="Icône" class="image">
                     Notifications
                 </a>
-                <a href="{{ path('admin_verification') }}" class="bouton bouton-admin">
+                <a href="{{ path('admin_verification')  }}" class="bouton bouton-admin">
                     Valider les inscriptions
                 </a>
-                <a href="{{ path('app_infos_new') }}" class="bouton bouton-admin">
+                <a href="{{  path('app_infos_new') }}" class="bouton bouton-admin">
                     Ajouter Infos
                 </a>
-                <a href="{{ path('admin_statistiques') }}" class="bouton bouton-admin">
-                    
+                <a href="{{  path('admin_statistiques') }}" class="bouton bouton-admin">
                     Statistiques
                 </a>
             {% endif %}
+        {% endif %}
         </div>
     </div>
 {% endblock %}
